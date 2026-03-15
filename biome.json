@@ -1,0 +1,71 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.4/schema.json",
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 100
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "style": {
+        "useConst": "warn",
+        "useNodejsImportProtocol": "off",
+        "noUselessElse": "off"
+      },
+      "a11y": {
+        "useValidAnchor": "off",
+        "useKeyWithClickEvents": "off",
+        "useSemanticElements": "off",
+        "useFocusableInteractive": "off",
+        "noRedundantRoles": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off"
+      },
+      "complexity": {
+        "noStaticOnlyClass": "off",
+        "noImportantStyles": "off"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off"
+      }
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "es5"
+    }
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!node_modules",
+      "!.next",
+      "!dist",
+      "!out",
+      "!build",
+      "!prisma/migrations",
+      "!*.config.js"
+    ]
+  }
+}

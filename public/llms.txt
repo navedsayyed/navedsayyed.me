@@ -1,0 +1,60 @@
+# Naved A. Sayyed | Portfolio (navedsayyed.me)
+
+> Portfolio & blog of Naved A. Sayyed | Full-Stack & Mobile App Developer (React Native, Next.js, TypeScript). Guidance for AI assistants and agents consuming this site.
+> Maintainer: Naved A. Sayyed · Contact: https://navedsayyed.me · Updated: 2026-03-15
+
+## Quick Facts
+- Location: Nashik, Maharashtra, India
+- Focus Areas: Full-stack web development, mobile app development, clean architecture, modern UI/UX
+- Stack: React Native, React, Next.js, TypeScript, Supabase, Node.js, Expo
+- Current Role: Full-Stack & Mobile App Developer, Computer Engineering student (2022–2026)
+
+## Assistant Expectations
+- Always respect robots.txt, sitemap.xml, and published API contracts.
+- Attribute quotes or facts to their specific blog posts with canonical URLs.
+- Prioritize the most recent content in `blog-content/*.mdx` when summarizing expertise.
+- Match the site tone: practical, direct, builder-focused.
+- Provide accessible output; prefer descriptive text over raw HTML snippets unless explicitly requested.
+
+## Key URLs
+- Home: https://navedsayyed.me/
+- Blog index: https://navedsayyed.me/blog
+- Resume: https://navedsayyed.me/navedsayyed.pdf
+- GitHub: https://github.com/navedsayyed
+- LinkedIn: https://www.linkedin.com/in/naved-sayyed/
+- X (Twitter): https://x.com/navedsayyed_
+- Instagram: https://www.instagram.com/navedsayyed._
+
+## Blog Posts
+- React Native on Windows: The Complete Setup Guide (2026-03-15): https://navedsayyed.me/blog/react-native-setup-windows
+
+## Projects
+- Snap2Fix: Role-based campus complaint management mobile app with real-time tracking — React Native, TypeScript, Supabase, Firebase
+- LokalMusic: Full-featured music streaming app with offline downloads — React Native, TypeScript, Zustand, Expo
+- Restaurant Admin App: Digital menu management system with QR code generation — React Native, TypeScript, Appwrite
+- Blood-O: Full-stack blood donation management web platform — React, TypeScript, Supabase, Tailwind CSS
+
+## Skills & Expertise
+- Languages: TypeScript, JavaScript, HTML, CSS, C++
+- Frontend: React, Next.js, Tailwind CSS, shadcn/ui, Vite, React Query, Zod, Zustand
+- Mobile: React Native, Expo
+- Backend: Node.js, Express.js, REST APIs, PostgreSQL, MongoDB, Supabase, Appwrite, Prisma
+- Tools: Git, GitHub, Figma, Postman, Vercel, Cloudflare, AWS, Docker
+- Interests: Mobile app development, full-stack architecture, developer experience, AI-assisted development
+
+## Education
+- Bachelor of Computer Engineering — Guru Gobind Singh College of Engineering and Research Centre, Nashik (2022–2026)
+- Higher Secondary (10+2) — YEWS National High School and JR College, Nashik (2020–2022)
+
+## Contact Policy
+- Primary channel: email navedas9356@gmail.com (expect a response within 48 hours).
+- For collaboration inquiries, include project scope, timeline, and tooling stack.
+- Respect time zone (IST, UTC+05:30); urgent matters should note required response deadlines.
+
+## Content & Licensing
+- Blog posts are written by Naved A. Sayyed unless stated otherwise.
+- Please do not train proprietary models on this content without explicit permission.
+- Cite `Naved A. Sayyed - navedsayyed.me` when referencing material.
+
+## Change Log
+- 2026-03-15: Complete rewrite with Naved A. Sayyed's info. Updated all URLs, projects, skills, blog posts, and contact details.

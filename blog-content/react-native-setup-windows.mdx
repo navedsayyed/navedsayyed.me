@@ -1,0 +1,251 @@
+---
+title: "React Native on Windows: The Complete Setup Guide (2026)"
+description: "A no-fluff, step-by-step guide to setting up a production-ready React Native development environment on Windows — from Node.js to your first running app."
+developer: "Naved A. Sayyed"
+date: "2026-03-15"
+published: true
+image: '/blog/react-native-setup-windows.webp'
+tags: ["React Native", "Android", "Windows", "Mobile Development"]
+---
+
+## Introduction
+
+Setting up React Native on Windows is one of those tasks that looks simple until you're knee-deep in environment variable hell at 2 AM wondering why `adb` isn't recognized. This guide cuts through the noise.
+
+By the end of this post, you'll have a fully working React Native environment on Windows — with Android Studio, the correct SDK tools, proper environment variables, and a live app running on an emulator. No guesswork, no skipped steps.
+
+> **Reference:** The full setup checklist is also available as a GitHub repo — [ReactNative-Setup-Guide](https://github.com/navedsayyed/ReactNative-Setup-Guide)
+
+---
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- A Windows 10 or 11 machine (64-bit)
+- Administrator access (needed for environment variables)
+- A stable internet connection (Android Studio is ~1 GB)
+
+---
+
+## Step 1: Install Node.js
+
+React Native's tooling runs on Node.js, so this is your first stop.
+
+- Download the **LTS version** from [nodejs.org](https://nodejs.org)
+- Run the installer with default settings
+
+Once installed, open a **new** terminal and verify:
+
+```powershell
+node -v
+npm -v
+```
+
+You should see version numbers for both. If not, restart your terminal — it needs to pick up the new PATH.
+
+---
+
+## Step 2: Install Java Development Kit (JDK 17)
+
+React Native requires Java to compile Android apps. Use **JDK 17** — it's the LTS version and what the toolchain expects.
+
+- Download from [Oracle JDK 17](https://www.oracle.com/java/technologies/downloads/#jdk17-windows)
+- Install with default settings
+
+Verify the installation:
+
+```powershell
+java -version
+```
+
+You should see something like `java version "17.x.x"`.
+
+---
+
+## Step 3: Install Android Studio
+
+Android Studio is the IDE that ships with all the Android tooling React Native needs — even if you never write a line of Kotlin.
+
+- Download from [developer.android.com/studio](https://developer.android.com/studio)
+- During the setup wizard, make sure all three of these are checked:
+
+| Component | Required |
+|-----------|----------|
+| Android SDK | ✅ Yes |
+| Android SDK Platform | ✅ Yes |
+| Android Virtual Device (AVD) | ✅ Yes |
+
+### ⚠️ Critical: SDK Path Must Have No Spaces
+
+This is a common silent failure. The default SDK path on Windows often includes your username:
+
+```
+❌ C:\Users\Naved Sayyed\AppData\Local\Android\Sdk   ← spaces = broken
+✅ C:\Android\Sdk                                     ← clean path = works
+```
+
+During installation (or in SDK Manager settings), set the SDK location to `C:\Android\Sdk`.
+
+---
+
+## Step 4: Install SDK Platforms
+
+Open Android Studio, then go to:
+
+**Settings → SDK Manager → SDK Platforms tab**
+
+Check both of these:
+
+| Platform | API Level | Purpose |
+|----------|-----------|---------|
+| Android 16 | API 36 | Target / Compile SDK |
+| Android 5.0 | API 21 | Minimum supported SDK |
+
+---
+
+## Step 5: Install SDK Tools
+
+Still in the SDK Manager, switch to the **SDK Tools** tab.
+
+Enable **"Show Package Details"** (checkbox at the bottom right), then select:
+
+| Tool | Version |
+|------|---------|
+| Android SDK Platform-Tools | Latest |
+| Android Emulator | Latest |
+| Android SDK Build-Tools | `35.0.0` and `36.0.0` |
+| NDK (Side by Side) | `27.1.12297006` |
+| Android Emulator Hypervisor Driver | Latest |
+
+Click **Apply** and let it download.
+
+---
+
+## Step 6: Configure Environment Variables
+
+This step is where most people go wrong. You need to add variables in **both** User Variables and System Variables.
+
+Open: **System Properties → Advanced → Environment Variables**
+
+### Add to User Variables (top section)
+
+| Variable | Value |
+|----------|-------|
+| `JAVA_HOME` | `C:\Program Files\Java\jdk-17` |
+| `ANDROID_HOME` | `C:\Android\Sdk` |
+
+Also add these three entries to the **Path** variable under User Variables:
+
+```
+%ANDROID_HOME%\platform-tools
+%ANDROID_HOME%\emulator
+%ANDROID_HOME%\cmdline-tools\bin
+```
+
+### Repeat for System Variables (bottom section)
+
+Add the same `JAVA_HOME` and `ANDROID_HOME` variables, and the same three Path entries.
+
+### Verify everything is working
+
+Close all terminals, open a **new** one, and run:
+
+```powershell
+echo %JAVA_HOME%
+echo %ANDROID_HOME%
+adb --version
+```
+
+If `adb --version` prints a version number, you're good to go.
+
+---
+
+## Step 7: Create Your First React Native Project
+
+### Remove the old CLI (if installed)
+
+The old global `react-native-cli` package causes conflicts. Remove it first:
+
+```powershell
+npm uninstall -g react-native-cli @react-native-community/cli
+```
+
+### Scaffold a new project
+
+Open a terminal at `C:\` and run:
+
+```powershell
+npx @react-native-community/cli@latest init AwesomeProject
+```
+
+This creates a new folder at `C:\AwesomeProject` with everything set up.
+
+### Start the Metro bundler
+
+```powershell
+cd C:\AwesomeProject
+npm start
+```
+
+Keep this terminal open. Metro is the JavaScript bundler that serves your code to the app.
+
+### Run on Android (in a second terminal)
+
+Open a new terminal in the same project folder:
+
+```powershell
+npm run android
+```
+
+This will launch the Android emulator (or connect to a physical device) and install the app. First run takes a few minutes — subsequent runs are much faster.
+
+---
+
+## Common Issues & Fixes
+
+**`adb` not recognized** → Environment variables weren't saved. Reopen terminal after adding them.
+
+**Emulator won't start** → Make sure Intel HAXM or the Android Emulator Hypervisor Driver is installed from SDK Tools.
+
+**`SDK location not found`** → The SDK path has spaces. Move it to `C:\Android\Sdk`.
+
+**Metro fails to start** → Port 8081 is in use. Run `npx react-native start --port 8082` instead.
+
+---
+
+## Summary
+
+Here's the full picture at a glance:
+
+| Component | Version / Setting |
+|-----------|------------------|
+| Node.js | LTS |
+| JDK | 17 |
+| SDK Platforms | API 21 (min), API 36 (target) |
+| SDK Build-Tools | 35.0.0, 36.0.0 |
+| NDK (Side by Side) | 27.1.12297006 |
+| Environment Variables | Both User & System |
+
+And the commands you'll actually use:
+
+```powershell
+# One-time setup
+npm uninstall -g react-native-cli @react-native-community/cli
+npx @react-native-community/cli@latest init AwesomeProject
+
+# Every time you develop
+cd C:\AwesomeProject
+npm start           # Terminal 1 — keep open
+npm run android     # Terminal 2
+```
+
+---
+
+## Conclusion
+
+React Native's setup on Windows has a lot of moving parts, but once each piece is in place, the development experience is smooth. The most important things to remember: use JDK 17, keep the SDK path free of spaces, and set your environment variables in both User and System sections.
+
+From here, you're ready to start building cross-platform apps. The next step is exploring the [React Native docs](https://reactnative.dev/docs/getting-started) for your first component, or diving into navigation with [React Navigation](https://reactnavigation.org/).
+
+Happy building. 🚀
