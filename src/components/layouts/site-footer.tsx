@@ -21,7 +21,6 @@ const SiteFooter = () => {
               navedsayyed
               <ArrowUpRight size={15} className="inline-block" />
             </Link>{" "}
-            
           </p>
         </div>
       </div>

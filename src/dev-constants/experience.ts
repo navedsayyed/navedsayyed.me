@@ -18,9 +18,7 @@ export const ExperienceData: Experience[] = [
       "Supported the Product Research and Development (PRD) department in analyzing and organizing production-related data.",
       "Ensured the confidentiality and integrity of sensitive military data throughout the internship.",
     ],
-    skills: [
-      { name: "Excel", icon: "/tech-icon/excel.svg" },
-    ],
+    skills: [{ name: "Excel", icon: "/tech-icon/excel.svg" }],
   },
   {
     company: "COSA-GCOERC",

@@ -1,15 +1,15 @@
+import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
 import {
-    ExpandableSection,
-    ExpandableSectionDescription,
-    ExpandableSectionHeader,
-    ExpandableSectionLabel,
-    ExpandableSectionList,
-    ExpandableSectionTitle,
+  ExpandableSection,
+  ExpandableSectionDescription,
+  ExpandableSectionHeader,
+  ExpandableSectionLabel,
+  ExpandableSectionList,
+  ExpandableSectionTitle,
 } from "@/components/ui/extended/expandable-section";
-import { ArrowUpRight } from "lucide-react";
 import { ProjectsData } from "@/dev-constants/projects";
 
 function toSlug(title: string) {

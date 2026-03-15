@@ -1,12 +1,12 @@
-import { notFound } from "next/navigation";
 import { Calendar, DotIcon, Github, Globe } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import PageShellWrapper from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import StackBadge from "@/components/ui/extended/stack-badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DeveloperDetails } from "@/dev-constants/details";
 import { ProjectsData } from "@/dev-constants/projects";
 
@@ -69,9 +69,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
               <h1 className="text-3xl font-medium tracking-tight text-foreground md:text-4xl">
                 {project.title}
               </h1>
-              <p className="text-base leading-relaxed text-muted-foreground">
-                {project.tagline}
-              </p>
+              <p className="text-base leading-relaxed text-muted-foreground">{project.tagline}</p>
             </div>
           </div>
 
@@ -141,7 +139,9 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
             <div className="text-center space-y-1">
               <p className="text-2xl font-bold text-foreground">{project.title}</p>
               <p className="text-sm text-muted-foreground">{project.tagline}</p>
-              <p className="text-xs text-muted-foreground/60 mt-2">{DeveloperDetails.portfolio.replace(/^https?:\/\//, "")}</p>
+              <p className="text-xs text-muted-foreground/60 mt-2">
+                {DeveloperDetails.portfolio.replace(/^https?:\/\//, "")}
+              </p>
             </div>
           </div>
         </div>
