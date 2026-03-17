@@ -44,7 +44,10 @@ export interface Projects {
   description: Array<string>;
   liveLink?: string;
   repo?: string;
+  apkLink?: string;
+  docsLink?: string;
   techStack: Array<TechStack>;
+  screenshots?: string[];
 }
 
 export interface TechStack {

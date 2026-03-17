@@ -1,4 +1,6 @@
-import { Calendar, DotIcon, Github, Globe } from "lucide-react";
+import { Calendar, DotIcon, Download, ExternalLink, FileText, Github } from "lucide-react";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -6,6 +8,7 @@ import PageShellWrapper from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import ScreenshotLightbox from "@/components/ui/extended/screenshot-lightbox";
 import StackBadge from "@/components/ui/extended/stack-badge";
 import { DeveloperDetails } from "@/dev-constants/details";
 import { ProjectsData } from "@/dev-constants/projects";
@@ -19,6 +22,15 @@ function toSlug(title: string) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
+}
+
+function filterExistingScreenshots(screenshots: string[] | undefined) {
+  if (!screenshots || screenshots.length === 0) return [];
+  return screenshots.filter((src) => {
+    const relativePath = src.replace(/^\//, "");
+    const fullPath = join(process.cwd(), "public", relativePath);
+    return existsSync(fullPath);
+  });
 }
 
 export async function generateStaticParams() {
@@ -47,6 +59,10 @@ export async function generateMetadata({ params }: ProjectPageProps) {
 const ProjectPage = async ({ params }: ProjectPageProps) => {
   const { slug } = await params;
   const project = ProjectsData.find((p) => toSlug(p.title) === slug);
+  const validScreenshots = filterExistingScreenshots(project?.screenshots);
+  const hasActionLinks = Boolean(
+    project?.repo || project?.liveLink || project?.apkLink || project?.docsLink
+  );
 
   if (!project) notFound();
 
@@ -98,35 +114,58 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
               </div>
             )}
 
-            {project.liveLink && (
-              <Link
-                href={project.liveLink}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="flex items-center gap-1.5 hover:text-foreground transition-colors"
-              >
-                <Globe className="h-4 w-4" />
-                <span>Live Site</span>
-              </Link>
-            )}
+          </div>
 
-            {project.repo && (
-              <Link
-                href={project.repo}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="flex items-center gap-1.5 hover:text-foreground transition-colors"
-              >
-                <Github className="h-4 w-4" />
-                <span>Source Code</span>
-              </Link>
+          <div className="flex flex-wrap items-center gap-2 pt-1 min-h-9">
+            {hasActionLinks ? (
+              <>
+                {project.repo && (
+                  <Button asChild variant="outline" size="sm" className="rounded-lg">
+                    <Link href={project.repo} target="_blank" rel="noreferrer noopener">
+                      <Github className="h-4 w-4" />
+                      <span>GitHub</span>
+                    </Link>
+                  </Button>
+                )}
+
+                {project.liveLink && (
+                  <Button asChild variant="outline" size="sm" className="rounded-lg">
+                    <Link href={project.liveLink} target="_blank" rel="noreferrer noopener">
+                      <ExternalLink className="h-4 w-4" />
+                      <span>Live Demo</span>
+                    </Link>
+                  </Button>
+                )}
+
+                {project.apkLink && (
+                  <Button asChild variant="outline" size="sm" className="rounded-lg">
+                    <Link href={project.apkLink} target="_blank" rel="noreferrer noopener">
+                      <Download className="h-4 w-4" />
+                      <span>Download APK</span>
+                    </Link>
+                  </Button>
+                )}
+
+                {project.docsLink && (
+                  <Button asChild variant="outline" size="sm" className="rounded-lg">
+                    <Link href={project.docsLink} target="_blank" rel="noreferrer noopener">
+                      <FileText className="h-4 w-4" />
+                      <span>Docs</span>
+                    </Link>
+                  </Button>
+                )}
+              </>
+            ) : (
+              <span className="inline-flex items-center rounded-lg border px-3 py-1.5 text-sm text-muted-foreground">
+                Private / No public links
+              </span>
             )}
           </div>
         </header>
       </ShellWrapper>
 
-      {/* Cover block — same as blog's cover image ShellWrapper */}
-      <ShellWrapper>
+      {/* Cover block — commented out */}
+      {/* <ShellWrapper>
         <div className="overflow-hidden bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">
           <div className="max-h-96 mx-auto aspect-video border bg-background flex flex-col items-center justify-center gap-4">
             <Image
@@ -145,7 +184,17 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
             </div>
           </div>
         </div>
-      </ShellWrapper>
+      </ShellWrapper> */}
+
+      {/* Screenshots */}
+      {validScreenshots.length > 0 && (
+        <ShellWrapper>
+          <div className="p-2 space-y-3">
+            <h2 className="text-xl font-medium text-foreground">Screenshots</h2>
+            <ScreenshotLightbox screenshots={validScreenshots} projectTitle={project.title} />
+          </div>
+        </ShellWrapper>
+      )}
 
       {/* Content — same pattern as blog article ShellWrapper */}
       <ShellWrapper>
@@ -162,8 +211,6 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
               ))}
             </ul>
           </section>
-
-          {/* Tech Stack */}
           {project.techStack && project.techStack.length > 0 && (
             <section>
               <h2 className="text-xl font-medium text-foreground mb-3">Tech Stack</h2>

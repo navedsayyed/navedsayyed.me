@@ -6,6 +6,10 @@ export const ProjectsData: Projects[] = [
     title: "Snap2Fix",
     tagline: "Smart Complaint Management System",
     date: "2025-01-15",
+    repo: "https://github.com/navedsayyed/Snap2Fix",
+    liveLink: "https://snap2fix.vercel.app/",
+    apkLink:
+      "https://github.com/navedsayyed/App-Releases/releases/download/snap2fix-v2026.03.16-0242/app-arm64-v8a-release.apk",
     description: [
       "Built a role-based campus complaint management mobile application enabling users, technicians, and administrators to track maintenance issues in real time.",
       "Implemented authentication, complaint submission workflow, and status tracking with backend integration.",
@@ -13,6 +17,24 @@ export const ProjectsData: Projects[] = [
       "Used Supabase (PostgreSQL) for backend services and real-time data synchronization.",
       "Implemented QR scanning, media upload, and animated UI using React Native libraries.",
       "Deployed a complementary web platform for complaint management and administration.",
+    ],
+    screenshots: [
+      "/projects/snap2fix/ss-1.webp",
+      "/projects/snap2fix/ss-2.webp",
+      "/projects/snap2fix/ss-3.webp",
+      "/projects/snap2fix/ss-4.webp",
+      "/projects/snap2fix/ss-5.webp",
+      "/projects/snap2fix/ss-6.webp",
+      "/projects/snap2fix/ss-7.webp",
+      "/projects/snap2fix/ss-8.webp",
+      "/projects/snap2fix/ss-9.webp",
+      "/projects/snap2fix/ss-10.webp",
+      "/projects/snap2fix/ss-11.webp",
+      "/projects/snap2fix/ss-12.webp",
+      "/projects/snap2fix/ss-13.webp",
+      "/projects/snap2fix/ss-14.webp",
+      
+
     ],
     techStack: [
       { name: "React Native", icon: "/tech-icon/react.svg" },
@@ -33,6 +55,11 @@ export const ProjectsData: Projects[] = [
       "Built smooth UI animations and gesture-based interactions for enhanced user experience.",
       "Added offline download functionality using file system storage.",
     ],
+    screenshots: [
+      "/projects/lokalmusic/ss-1.png",
+      "/projects/lokalmusic/ss-2.png",
+      "/projects/lokalmusic/ss-3.png",
+    ],
     techStack: [
       { name: "React Native", icon: "/tech-icon/react.svg" },
       { name: "TypeScript", icon: "/tech-icon/typescript.svg" },
@@ -52,6 +79,11 @@ export const ProjectsData: Projects[] = [
       "Built reusable UI components and structured navigation for scalable architecture.",
       "Implemented media upload and sharing functionality within the application.",
     ],
+    screenshots: [
+      "/projects/restaurant-admin/ss-1.png",
+      "/projects/restaurant-admin/ss-2.png",
+      "/projects/restaurant-admin/ss-3.png",
+    ],
     techStack: [
       { name: "React Native", icon: "/tech-icon/react.svg" },
       { name: "TypeScript", icon: "/tech-icon/typescript.svg" },
@@ -70,6 +102,11 @@ export const ProjectsData: Projects[] = [
       "Designed responsive UI using Tailwind CSS and modern component libraries.",
       "Implemented form validation, API data fetching, and analytics dashboard for administrators.",
     ],
+    screenshots: [
+      "/projects/blood-o/ss-1.png",
+      "/projects/blood-o/ss-2.png",
+      "/projects/blood-o/ss-3.png",
+    ],
     techStack: [
       { name: "React", icon: "/tech-icon/react.svg" },
       { name: "TypeScript", icon: "/tech-icon/typescript.svg" },
@@ -85,7 +122,8 @@ export const ProjectsData: Projects[] = [
   // 1. Copy the block below, uncomment it, and fill in your details.
   // 2. Add the project icon to /public/projects/<icon-file> and update `icon`.
   // 3. `liveLink` and `repo` are both optional — omit either if not applicable.
-  // 4. `date` format: "YYYY-MM-DD"
+  // 4. `apkLink` and `docsLink` are optional — add only when available.
+  // 5. `date` format: "YYYY-MM-DD"
   //
   // {
   //   icon: "/projects/your-project-icon.png",
@@ -99,6 +137,8 @@ export const ProjectsData: Projects[] = [
   //   ],
   //   liveLink: "https://your-live-link.com",   // optional
   //   repo: "https://github.com/you/repo",       // optional
+  //   apkLink: "/apk/your-app.apk",              // optional
+  //   docsLink: "https://docs.your-project.com", // optional
   //   techStack: [
   //     { name: "React", icon: "/tech-icon/react.svg" },
   //     { name: "TypeScript", icon: "/tech-icon/typescript.svg" },
