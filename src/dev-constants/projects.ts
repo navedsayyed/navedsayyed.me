@@ -9,7 +9,7 @@ export const ProjectsData: Projects[] = [
     // repo: "https://github.com/navedsayyed/Snap2Fix",
     liveLink: "https://snap2fix.vercel.app/",
     apkLink:
-      "https://github.com/navedsayyed/App-Releases/releases/download/snap2fix-v2026.03.16-0242/app-arm64-v8a-release.apk",
+      "https://github.com/navedsayyed/Snap2Fix-Releases/releases/latest/download/Snap2Fix.apk",
     description: [
       "Built a role-based campus complaint management mobile application enabling users, technicians, and administrators to track maintenance issues in real time.",
       "Implemented authentication, complaint submission workflow, and status tracking with backend integration.",
@@ -51,7 +51,7 @@ export const ProjectsData: Projects[] = [
     repo: "https://github.com/navedsayyed/LokalMusic",
     // liveLink: "https://snap2fix.vercel.app/",
     apkLink:
-      "https://github.com/navedsayyed/App-Releases/releases/download/lokalmusic-v2026.03.16-0150/LokalMusic.apk",
+      "https://github.com/navedsayyed/LokalMusic-Releases/releases/latest/download/LokalMusic.apk",
     description: [
       "Developed a full-featured music streaming mobile application supporting online streaming and offline downloads.",
       "Integrated JioSaavn API for fetching songs, artists, playlists, and lyrics dynamically.",
@@ -129,7 +129,7 @@ export const ProjectsData: Projects[] = [
     // repo: "https://github.com/navedsayyed/MenuForge",
     // liveLink: "https://menuforge.vercel.app/",
     apkLink:
-      "https://github.com/navedsayyed/App-Releases/releases/download/restaurant-admin-v2026.03.17-0613/app-arm64-v8a-release.apk",
+      "https://github.com/navedsayyed/MenuForge-Releases/releases/latest/download/MenuForge.apk",
     description: [
       "Developed a mobile application for restaurant owners to manage menu items, generate QR codes, and create digital menus.",
       "Implemented CRUD operations for menu management with backend integration.",
