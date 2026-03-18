@@ -1,4 +1,4 @@
-import { Calendar, DotIcon, Download, ExternalLink, FileText, Github } from "lucide-react";
+import { DotIcon, Download, ExternalLink, FileText, Github } from "lucide-react";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import Image from "next/image";
@@ -6,7 +6,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageShellWrapper from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import ScreenshotLightbox from "@/components/ui/extended/screenshot-lightbox";
 import StackBadge from "@/components/ui/extended/stack-badge";
@@ -70,50 +69,23 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
     <PageShellWrapper>
       {/* Header — same hatched-bg pattern as BlogHeader */}
       <ShellWrapper>
-        <header className="space-y-3 p-2 bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">
-          <div className="flex items-start gap-4">
-            <div className="aspect-square bg-muted h-12 flex items-center justify-center border rounded shrink-0">
-              <Image
-                src={project.icon}
-                alt={`${project.title} icon`}
-                width={40}
-                height={40}
-                className="h-10 w-10 rounded object-cover"
-              />
-            </div>
-            <div className="space-y-1">
-              <h1 className="text-3xl font-medium tracking-tight text-foreground md:text-4xl">
+        <header className="space-y-4 p-4 bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <div className="bg-muted h-10 w-10 flex items-center justify-center border rounded-lg shrink-0">
+                <Image
+                  src={project.icon}
+                  alt={`${project.title} icon`}
+                  width={32}
+                  height={32}
+                  className="h-8 w-8 rounded object-cover"
+                />
+              </div>
+              <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
                 {project.title}
               </h1>
-              <p className="text-base leading-relaxed text-muted-foreground">{project.tagline}</p>
             </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <Avatar className="h-6 w-6 border">
-                <AvatarImage
-                  src={DeveloperDetails.avatar}
-                  alt={`${DeveloperDetails.name} avatar`}
-                />
-                <AvatarFallback>{DeveloperDetails.initials}</AvatarFallback>
-              </Avatar>
-              <span>{DeveloperDetails.name}</span>
-            </div>
-
-            {project.date && (
-              <div className="flex items-center gap-1.5">
-                <Calendar className="h-4 w-4" />
-                <time dateTime={project.date}>
-                  {new Date(project.date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
-              </div>
-            )}
-
+            <p className="text-base leading-relaxed text-muted-foreground">{project.tagline}</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 pt-1 min-h-9">
