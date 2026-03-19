@@ -33,8 +33,6 @@ export const ProjectsData: Projects[] = [
       "/projects/snap2fix/ss-12.webp",
       "/projects/snap2fix/ss-13.webp",
       "/projects/snap2fix/ss-14.webp",
-      
-
     ],
     techStack: [
       { name: "React Native", icon: "/tech-icon/react.svg" },
@@ -167,7 +165,6 @@ export const ProjectsData: Projects[] = [
       "/projects/COSA-Website/ss-1.webp",
       "/projects/COSA-Website/ss-2.webp",
       "/projects/COSA-Website/ss-3.webp",
-      
     ],
 
     techStack: [

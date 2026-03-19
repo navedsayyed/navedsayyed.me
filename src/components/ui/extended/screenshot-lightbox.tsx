@@ -10,10 +10,7 @@ interface ScreenshotLightboxProps {
   projectTitle: string;
 }
 
-export default function ScreenshotLightbox({
-  screenshots,
-  projectTitle,
-}: ScreenshotLightboxProps) {
+export default function ScreenshotLightbox({ screenshots, projectTitle }: ScreenshotLightboxProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -104,6 +101,7 @@ export default function ScreenshotLightbox({
         {screenshots.map((src, index) => (
           <button
             key={src}
+            type="button"
             onClick={() => open(index)}
             className="overflow-hidden rounded-2xl border shrink-0 cursor-zoom-in"
           >
@@ -123,26 +121,32 @@ export default function ScreenshotLightbox({
       {mounted &&
         activeIndex !== null &&
         createPortal(
-          <div
-            className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/95 backdrop-blur-sm"
-            onClick={close}
-          >
+          <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center">
+            <button
+              type="button"
+              aria-label="Close lightbox"
+              className="absolute inset-0 bg-black/95 backdrop-blur-sm"
+              onClick={close}
+            />
+
             {/* Back button */}
             <button
+              type="button"
               onClick={close}
-              className="absolute left-4 top-4 text-white bg-black/50 p-2 rounded-full"
+              className="absolute left-4 top-4 z-10 rounded-full bg-black/50 p-2 text-white"
             >
               <ArrowLeft className="h-6 w-6" />
             </button>
 
             {/* Counter */}
-            <p className="absolute top-4 left-1/2 -translate-x-1/2 text-white/70 text-sm">
+            <p className="absolute left-1/2 top-4 z-10 -translate-x-1/2 text-sm text-white/70">
               {activeIndex + 1} / {screenshots.length}
             </p>
 
             {/* Slider */}
-            <div
-              className="relative w-full h-[82vh] overflow-hidden"
+            <button
+              type="button"
+              className="relative h-[82vh] w-full overflow-hidden"
               onClick={(e) => e.stopPropagation()}
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
@@ -153,36 +157,35 @@ export default function ScreenshotLightbox({
               <div
                 className="flex h-full transition-transform duration-300 ease-out"
                 style={{
-                  transform: `translate3d(calc(${
-                    -activeIndex * 100
-                  }% + ${dragOffset}px),0,0)`,
+                  transform: `translate3d(calc(${-activeIndex * 100}% + ${dragOffset}px),0,0)`,
                 }}
               >
                 {screenshots.map((src, i) => (
-                  <div
-                    key={src}
-                    className="w-full flex-shrink-0 flex items-center justify-center"
-                  >
-                    <img
+                  <div key={src} className="w-full flex-shrink-0 flex items-center justify-center">
+                    <Image
                       src={src}
                       alt={`${projectTitle} screenshot ${i + 1}`}
+                      width={1600}
+                      height={900}
                       className="max-h-[78vh] w-auto max-w-[92vw] rounded-2xl object-contain shadow-2xl"
                       draggable={false}
+                      unoptimized
                     />
                   </div>
                 ))}
               </div>
-            </div>
+            </button>
 
             {/* Dots */}
-            <div
-              className="absolute bottom-6 flex gap-2"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <div className="absolute bottom-6 z-10 flex gap-2">
               {screenshots.map((_, i) => (
                 <button
+                  type="button"
                   key={i}
-                  onClick={() => setActiveIndex(i)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveIndex(i);
+                  }}
                   className={`h-2 rounded-full transition-all ${
                     i === activeIndex ? "w-6 bg-white" : "w-2 bg-white/40"
                   }`}
