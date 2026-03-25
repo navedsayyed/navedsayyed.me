@@ -81,7 +81,7 @@ export const ProjectsData: Projects[] = [
       { name: "React Native", icon: "/tech-icon/react.svg" },
       { name: "TypeScript", icon: "/tech-icon/typescript.svg" },
       { name: "Zustand", icon: "/tech-icon/zustand.svg" },
-      { name: "Expo", icon: "/tech-icon/expo.svg" },
+      { name: "Expo", icon: "/tech-icon/Expo.svg" },
     ],
   },
   {
