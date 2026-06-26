@@ -11,18 +11,13 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
     
-    // Debug: Check if API key exists
     if (!apiKey) {
       console.error("GEMINI_API_KEY not found in environment variables");
       return Response.json({ error: "API key not configured" }, { status: 500 });
     }
-    
-    console.log("API Key exists, length:", apiKey.length);
-    console.log("API Key starts with:", apiKey.substring(0, 10));
 
     const genAI = new GoogleGenerativeAI(apiKey);
 
-    // Use the same model as Snap2Fix
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash-lite",
       generationConfig: {
@@ -42,12 +37,50 @@ ${knowledgeBase}
 
 USER QUESTION: ${message}`;
 
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
+    // Retry logic for 503 errors (high demand)
+    let retries = 3;
+    let lastError;
 
-    return Response.json({ response: text });
+    while (retries > 0) {
+      try {
+        const result = await model.generateContent(prompt);
+        const text = result.response.text();
+        return Response.json({ response: text });
+      } catch (error: any) {
+        lastError = error;
+        
+        // Check if it's a 503 (high demand) error
+        if (error?.status === 503 || error?.message?.includes("high demand")) {
+          retries--;
+          if (retries > 0) {
+            console.log(`⚠️ Model busy, retrying... (${retries} attempts left)`);
+            // Wait 1 second before retry
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            continue;
+          }
+        }
+        
+        // If not 503 or no retries left, throw the error
+        throw error;
+      }
+    }
+
+    // If all retries failed
+    throw lastError;
+
   } catch (error) {
     console.error("Chat API error:", error);
+    
+    // User-friendly error messages
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    
+    if (errorMessage.includes("high demand")) {
+      return Response.json(
+        { error: "The AI is currently busy. Please try again in a moment." },
+        { status: 503 }
+      );
+    }
+    
     return Response.json(
       { error: "Something went wrong. Please try again." },
       { status: 500 }
