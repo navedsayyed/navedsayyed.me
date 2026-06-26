@@ -2,7 +2,7 @@ export const knowledgeBase = `
 Name: Naved A. Sayyed
 Role: Full Stack Developer (React Native, Next.js, Supabase)
 Location: Nashik, Maharashtra, India
-Education: Final-year Computer Engineering, GGSCOERC Nashik (graduating July 2026)
+Education: Final-year Computer Engineering, GCOERC Nashik (graduating July 2026)
 
 PROJECTS:
 
@@ -59,8 +59,8 @@ SKILLS:
 
 CONTACT:
 Email: navedas9356@gmail.com
-Phone: +91 9356559922
-WhatsApp: +91 9356559922
+Phone: +91 9356055279
+WhatsApp: +91 9356055279
 GitHub: https://github.com/navedsayyed
 LinkedIn: https://www.linkedin.com/in/naved-sayyed/
 Twitter: https://x.com/navedsayyed_

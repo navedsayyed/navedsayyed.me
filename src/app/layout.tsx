@@ -2,9 +2,9 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { PortfolioChatbot } from "@/components/chatbot";
 import SiteFooter from "@/components/layouts/site-footer";
 import SiteHeader from "@/components/layouts/site-header";
-import { PortfolioChatbot } from "@/components/chatbot";
 import { DeveloperDetails } from "@/dev-constants/details";
 
 const siteUrl = DeveloperDetails.portfolio.replace(/\/$/, "");

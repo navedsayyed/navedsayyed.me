@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, Send, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 type Message = {
   role: "user" | "assistant";
@@ -13,8 +13,7 @@ export function PortfolioChatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content:
-        "Hi! I'm Naved's AI assistant. Ask me about his projects, skills, or experience!",
+      content: "Hi! I'm Naved's AI assistant. Ask me about his projects, skills, or experience!",
     },
   ]);
   const [input, setInput] = useState("");
@@ -65,6 +64,7 @@ export function PortfolioChatbot() {
     <>
       {!isOpen && (
         <button
+          type="button"
           onClick={() => setIsOpen(true)}
           className="fixed bottom-4 right-4 h-14 w-14 rounded-full bg-foreground text-background shadow-lg flex items-center justify-center z-50 hover:scale-110 transition-transform"
           aria-label="Open chat"
@@ -78,6 +78,7 @@ export function PortfolioChatbot() {
           <div className="p-4 border-b border-border flex items-center justify-between bg-muted/50">
             <h3 className="font-medium text-foreground">Chat with Naved's AI</h3>
             <button
+              type="button"
               onClick={() => setIsOpen(false)}
               className="hover:bg-accent rounded p-1"
               aria-label="Close chat"
@@ -105,9 +106,7 @@ export function PortfolioChatbot() {
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-muted text-foreground rounded-lg p-3 text-sm">
-                  Thinking...
-                </div>
+                <div className="bg-muted text-foreground rounded-lg p-3 text-sm">Thinking...</div>
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -123,6 +122,7 @@ export function PortfolioChatbot() {
               className="flex-1 px-3 py-2 border border-border bg-background text-foreground rounded-md text-sm outline-none focus:ring-2 focus:ring-ring"
             />
             <button
+              type="button"
               onClick={sendMessage}
               disabled={loading}
               className="bg-primary text-primary-foreground rounded-md px-3 flex items-center justify-center hover:bg-primary/90 disabled:opacity-50"
