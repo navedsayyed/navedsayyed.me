@@ -4,6 +4,7 @@ import { Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import SiteFooter from "@/components/layouts/site-footer";
 import SiteHeader from "@/components/layouts/site-header";
+import { PortfolioChatbot } from "@/components/chatbot";
 import { DeveloperDetails } from "@/dev-constants/details";
 
 const siteUrl = DeveloperDetails.portfolio.replace(/\/$/, "");
@@ -142,6 +143,7 @@ export default function RootLayout({
           <SiteHeader />
           <main id="main-content">{children}</main>
           <SiteFooter />
+          <PortfolioChatbot />
         </ThemeProvider>
       </body>
     </html>
