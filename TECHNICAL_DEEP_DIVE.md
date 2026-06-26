@@ -19,6 +19,7 @@ This is a statically-generated portfolio website built with Next.js 16 (App Rout
 │  - Static HTML + hydrated React components                     │
 │  - Theme switcher (client-side state via next-themes)          │
 │  - Contribution graph (fetches /api/github-contributions)      │
+│  - AI Chatbot UI (fetches /api/chat)                           │
 └─────────────────────────────────────────────────────────────────┘
                              ▲
                              │ Requests
@@ -27,7 +28,7 @@ This is a statically-generated portfolio website built with Next.js 16 (App Rout
 │                      Next.js App Router                         │
 │  - Server Components (default, RSC)                            │
 │  - Static page generation (build time)                         │
-│  - API routes (/api/github-contributions, /feed.xml)           │
+│  - API routes (/api/github-contributions, /api/chat, /feed.xml)│
 └─────────────────────────────────────────────────────────────────┘
                              │
                              ▼
@@ -35,22 +36,25 @@ This is a statically-generated portfolio website built with Next.js 16 (App Rout
 │                    Data Sources (Build Time)                    │
 │  - /blog-content/*.mdx → gray-matter → BlogPost[]              │
 │  - /src/dev-constants/*.ts → Static TypeScript objects         │
+│  - /src/lib/chatbot/knowledge-base.ts → Static portfolio data  │
 │  - /public/tech-icon/, /public/projects/, etc. → Static assets │
 └─────────────────────────────────────────────────────────────────┘
                              │
                              ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│               External API (Runtime, Client-Side)               │
+│               External APIs (Runtime, Client-Side)              │
 │  - GitHub GraphQL API → Contribution calendar data             │
+│  - Google Gemini API → AI chatbot responses (via server route) │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 **Key Points:**
 - No runtime database — all content is file-based (TypeScript constants + MDX files)
 - Static Site Generation (SSG) for all pages at build time
-- One API route (`/api/github-contributions`) fetches live data from GitHub's GraphQL API
+- Two API routes: `/api/github-contributions` (fetches live GitHub data), `/api/chat` (AI chatbot powered by Google Gemini)
 - RSS feed generated as a route handler (`/feed.xml/route.ts`)
 - Dark/light theme toggling via `next-themes` (client-side localStorage)
+- AI-powered chatbot with rate limiting and structured knowledge base
 
 
 ---
@@ -209,6 +213,20 @@ Every dependency from `package.json` explained with actual usage in this codebas
 - **Where:** `src/components/main/developer-git-contribution.tsx` line 2: `import { format, parseISO } from "date-fns"`.  
 - **Why:** Formats dates in contribution graph tooltips.  
 - **How it's used:** `format(parseISO(activity.date), "MMM d, yyyy")` converts ISO date string to "Jan 15, 2026".
+
+### AI & Machine Learning
+
+**@google/generative-ai@0.24.1**  
+- **What:** Google's official Gemini AI SDK for TypeScript/JavaScript.  
+- **Where:** `src/app/api/chat/route.ts` line 1.  
+- **Why:** Powers the portfolio chatbot with conversational AI capabilities.  
+- **How it's used:**  
+  - Initializes Gemini client: `const genAI = new GoogleGenerativeAI(apiKey)`.  
+  - Creates model instance: `genAI.getGenerativeModel({ model: "gemini-2.5-flash", generationConfig })`.  
+  - Generates responses: `await model.generateContent(prompt)`.  
+  - Upgraded from `gemini-2.5-flash-lite` to `gemini-2.5-flash` (March 2026) for improved stability after Google reduced free tier limits in December 2025.  
+  - Free tier limits: 250 requests/day, 10 requests/minute, 250K tokens/minute.  
+  - Handles rate limiting and quota errors with user-friendly fallbacks.
 
 ### Development Tools
 
@@ -634,6 +652,161 @@ This project has **no runtime database**. All data is stored in:
 - Feed URL: `https://navedsayyed.me/feed.xml`
 - Each post GUID uses permalink (isPermaLink="true")
 - Author format: `email (name)` as per RSS spec
+
+**AI Chatbot API** (`src/app/api/chat/route.ts`)
+
+**Purpose:** Conversational AI assistant that answers questions about Naved's portfolio using Google's Gemini API.
+
+**Architecture:**
+```
+Client Request → Rate Limiter → Gemini API → Response
+                     ↓
+              Knowledge Base (static data)
+```
+
+**How it works:**
+1. **Rate Limiting (In-Memory):**
+   - Tracks requests per IP address via `Map<string, { count, resetAt }>`
+   - Limit: 10 requests per minute per IP
+   - Window resets every 60 seconds
+   - Returns 429 if limit exceeded
+   - IP extracted from `x-forwarded-for` or `x-real-ip` headers
+
+2. **Gemini API Integration:**
+   - Model: `gemini-2.5-flash` (upgraded from `flash-lite` for stability)
+   - Configuration:
+     - Temperature: 0.7 (balanced creativity)
+     - Top-K: 40, Top-P: 0.95 (nucleus sampling)
+     - Max output: 500 tokens (~2-4 sentence responses)
+   - Reads `GEMINI_API_KEY` from environment variables
+
+3. **Knowledge Base (`src/lib/chatbot/knowledge-base.ts`):**
+   - Static text containing all portfolio data:
+     - Personal info (name, role, location, education)
+     - Projects (Snap2Fix, LokalMusic, Grievance Resolver, etc.)
+     - Experience (Air Force internship, COSA-GCOERC)
+     - Skills (React, Next.js, React Native, Supabase, etc.)
+     - Contact details (email, phone: +91 9356055279, WhatsApp, social links)
+   - Injected into every prompt as context
+   - Size: ~2,000 tokens (well within Gemini's 1M context window)
+
+4. **Prompt Engineering:**
+   ```
+   You are Naved Sayyed's portfolio assistant. Answer questions about Naved 
+   using ONLY the information below. Be concise (2-4 sentences), friendly, 
+   and professional. If the answer isn't in the info, suggest contacting 
+   Naved directly at navedas9356@gmail.com.
+   
+   INFO ABOUT NAVED:
+   {knowledgeBase}
+   
+   USER QUESTION: {message}
+   ```
+   - Scoped responses (only uses knowledge base)
+   - Concise output (reduces token costs)
+   - Fallback to direct contact for unknown questions
+
+5. **Retry Logic:**
+   - 3 retry attempts for 503 errors (model overload)
+   - 1-second delay between retries
+   - Fails gracefully if all retries exhausted
+
+6. **Error Handling:**
+   - 429 errors → "I'm getting a lot of questions right now! Please try again in a bit, or reach out directly at navedas9356@gmail.com."
+   - Quota/limit errors → "Daily limit reached. Please contact Naved directly at navedas9356@gmail.com or +91 9356055279."
+   - Generic errors → "Something went wrong. Please try again."
+
+**API Rate Limits (Gemini Free Tier 2026):**
+- **Requests per day (RPD):** 250
+- **Requests per minute (RPM):** 10
+- **Tokens per minute (TPM):** 250,000
+- Cost: $0 (free tier)
+- Upgrade path: Paid tier costs ~$0.02-0.05/month for typical portfolio traffic
+
+**Frontend Component (`src/components/chatbot/portfolio-chatbot.tsx`):**
+
+**UI Pattern:**
+- Floating button (bottom-right) → Opens chat modal
+- **Client Component** (`"use client"`) for interactivity
+- Chat interface: message bubbles, input field, send button
+
+**State Management:**
+```tsx
+const [isOpen, setIsOpen] = useState(false);        // Modal visibility
+const [messages, setMessages] = useState([...]);    // Chat history
+const [input, setInput] = useState("");             // Current message
+const [loading, setLoading] = useState(false);      // Sending state
+```
+
+**Message Flow:**
+1. User types message → clicks Send (or presses Enter)
+2. Adds user message to chat history
+3. Calls `POST /api/chat` with `{ message: input }`
+4. Shows "Thinking..." indicator while waiting
+5. Receives response → adds assistant message to chat history
+6. Auto-scrolls to latest message via `useEffect` + `useRef`
+
+**Error Handling:**
+- Rate limit (429) → Shows friendly message from API response
+- Network error → "Sorry, I couldn't connect. Please try again."
+- Empty responses → "Sorry, something went wrong."
+
+**UI Details:**
+- Icons: `MessageCircle` (open button), `X` (close), `Send` (submit)
+- Styling: Tailwind with theme-aware colors (supports light/dark mode)
+- Accessibility:
+  - `type="button"` on all buttons (prevents form submission)
+  - `aria-label` for icon-only buttons
+  - Enter key submits message
+  - Disabled state while loading
+
+**Integration (`src/app/layout.tsx`):**
+- Added to root layout (line 153): `<PortfolioChatbot />`
+- Renders on every page (global component)
+- Exported from `src/components/chatbot/index.ts` barrel file
+
+**Why This Implementation:**
+
+**Chosen Stack:**
+- ✅ **Gemini over OpenAI:** Free tier has generous limits (250 RPD vs OpenAI's $0.002/1K tokens)
+- ✅ **In-memory rate limiting:** Simple, no Redis needed for portfolio-scale traffic
+- ✅ **Static knowledge base:** No vector database overhead, instant responses, 100% accurate citations
+- ✅ **Client-side UI:** Smooth UX without Server Components complexity for interactive chat
+
+**Tradeoffs:**
+- ❌ Rate limiter resets on server restart (acceptable for Vercel serverless functions)
+- ❌ No conversation history persistence (each message is independent)
+- ❌ Knowledge base must be manually updated when portfolio changes
+- ❌ Reliant on Google's free tier stability (limits changed in Dec 2025)
+
+**Production Considerations:**
+1. **API Key Security:**
+   - `GEMINI_API_KEY` stored in Vercel environment variables
+   - Never exposed to client (API route is server-side)
+   - Key included in `.env` (gitignored), example in `.env.example`
+
+2. **Cost Monitoring:**
+   - Free tier: 250 requests/day sufficient for typical portfolio traffic
+   - Average conversation: 3-5 messages = 3-5 requests
+   - Daily capacity: ~50 visitors with 5 messages each
+   - Paid upgrade: $0.30/1M input tokens + $1.20/1M output tokens
+
+3. **Scaling Strategy:**
+   - If traffic exceeds 250 RPD: Switch to `gemini-2.5-flash-lite` (1,000 RPD)
+   - If quality degrades: Upgrade to paid tier (minimal cost)
+   - If abuse detected: Add IP-based daily limits (currently only per-minute)
+
+4. **Monitoring:**
+   - Watch Vercel function logs for 429 errors (quota exceeded)
+   - Check Gemini API dashboard for usage trends
+   - User complaints about "too many requests" = need to raise RPM limit
+
+**Interview Talking Points:**
+- "Added RAG-style chatbot without vector database by using structured knowledge base"
+- "Implemented client-side rate limiting to protect free-tier API quota"
+- "Chose Gemini 2.5 Flash for balance of quality, speed, and cost (free tier)"
+- "Handles 250 daily conversations at zero cost vs. paid alternatives"
+- "Graceful degradation: specific error messages guide users to direct contact"
 
 
 ### SEO Utilities (`src/lib/seo-utils.ts`)
