@@ -59,9 +59,16 @@ SKILLS:
 
 CONTACT:
 Email: navedas9356@gmail.com
+Phone: +91 9356559922
+WhatsApp: +91 9356559922
 GitHub: https://github.com/navedsayyed
 LinkedIn: https://www.linkedin.com/in/naved-sayyed/
 Twitter: https://x.com/navedsayyed_
 Instagram: https://www.instagram.com/navedsayyed._
 Website: https://navedsayyed.me
+
+AVAILABILITY:
+- Open to freelance projects and full-time opportunities
+- Available for consultations and collaborations
+- Response time: Usually within 24 hours via email or WhatsApp
 `;
