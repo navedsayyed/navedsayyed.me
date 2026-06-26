@@ -1,8 +1,33 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { knowledgeBase } from "@/lib/chatbot/knowledge-base";
 
+// Simple in-memory rate limiting (resets on server restart)
+const requestCounts = new Map<string, { count: number; resetAt: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = requestCounts.get(ip);
+  if (!entry || now > entry.resetAt) {
+    requestCounts.set(ip, { count: 1, resetAt: now + 60_000 }); // 1 min window
+    return false;
+  }
+  if (entry.count >= 10) return true; // max 10 messages/min per IP
+  entry.count++;
+  return false;
+}
+
 export async function POST(request: Request) {
   try {
+    // Rate limiting
+    const ip =
+      request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown";
+    if (isRateLimited(ip)) {
+      return Response.json(
+        { error: "Too many requests. Please slow down a bit." },
+        { status: 429 }
+      );
+    }
+
     const { message } = await request.json();
 
     if (!message) {
@@ -19,7 +44,7 @@ export async function POST(request: Request) {
     const genAI = new GoogleGenerativeAI(apiKey);
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash-lite",
+      model: "gemini-2.5-flash", // Changed from gemini-2.5-flash-lite for stability
       generationConfig: {
         temperature: 0.7,
         topK: 40,
@@ -74,10 +99,23 @@ USER QUESTION: ${message}`;
     // User-friendly error messages
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
 
-    if (errorMessage.includes("high demand")) {
+    if (errorMessage.includes("high demand") || errorMessage.includes("429")) {
       return Response.json(
-        { error: "The AI is currently busy. Please try again in a moment." },
-        { status: 503 }
+        {
+          error:
+            "I'm getting a lot of questions right now! Please try again in a bit, or reach out directly at navedas9356@gmail.com.",
+        },
+        { status: 429 }
+      );
+    }
+
+    if (errorMessage.includes("quota") || errorMessage.includes("limit")) {
+      return Response.json(
+        {
+          error:
+            "Daily limit reached. Please contact Naved directly at navedas9356@gmail.com or +91 9356055279.",
+        },
+        { status: 429 }
       );
     }
 

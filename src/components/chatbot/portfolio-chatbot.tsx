@@ -40,11 +40,26 @@ export function PortfolioChatbot() {
       });
 
       const data = await res.json();
+
+      // Handle rate limiting specifically
+      if (res.status === 429) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content:
+              data.error ||
+              "I'm getting a lot of questions right now! Please try again in a bit, or reach out directly at navedas9356@gmail.com.",
+          },
+        ]);
+        return;
+      }
+
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: data.response || "Sorry, something went wrong.",
+          content: data.response || data.error || "Sorry, something went wrong.",
         },
       ]);
     } catch {
