@@ -23,6 +23,10 @@ function toSlug(title: string) {
     .replace(/(^-|-$)/g, "");
 }
 
+function getProjectSlug(project: { slug?: string; title: string }) {
+  return project.slug ?? toSlug(project.title);
+}
+
 function filterExistingScreenshots(screenshots: string[] | undefined) {
   if (!screenshots || screenshots.length === 0) return [];
   return screenshots.filter((src) => {
@@ -33,12 +37,12 @@ function filterExistingScreenshots(screenshots: string[] | undefined) {
 }
 
 export async function generateStaticParams() {
-  return ProjectsData.map((project) => ({ slug: toSlug(project.title) }));
+  return ProjectsData.map((project) => ({ slug: getProjectSlug(project) }));
 }
 
 export async function generateMetadata({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const project = ProjectsData.find((p) => toSlug(p.title) === slug);
+  const project = ProjectsData.find((p) => getProjectSlug(p) === slug);
   if (!project) return { title: "Project Not Found" };
 
   const siteUrl = DeveloperDetails.portfolio.replace(/\/$/, "");
@@ -57,7 +61,7 @@ export async function generateMetadata({ params }: ProjectPageProps) {
 
 const ProjectPage = async ({ params }: ProjectPageProps) => {
   const { slug } = await params;
-  const project = ProjectsData.find((p) => toSlug(p.title) === slug);
+  const project = ProjectsData.find((p) => getProjectSlug(p) === slug);
   const validScreenshots = filterExistingScreenshots(project?.screenshots);
   const hasActionLinks = Boolean(
     project?.repo || project?.liveLink || project?.apkLink || project?.docsLink

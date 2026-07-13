@@ -40,6 +40,7 @@ export interface Projects {
   icon: string;
   title: string;
   tagline: string;
+  slug?: string;
   date?: string;
   description: Array<string>;
   liveLink?: string;

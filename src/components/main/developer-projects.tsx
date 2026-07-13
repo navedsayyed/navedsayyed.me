@@ -19,6 +19,10 @@ function toSlug(title: string) {
     .replace(/(^-|-$)/g, "");
 }
 
+function getProjectSlug(project: { slug?: string; title: string }) {
+  return project.slug ?? toSlug(project.title);
+}
+
 const DeveloperProjects = () => {
   return (
     <ShellWrapper>
@@ -36,7 +40,7 @@ const DeveloperProjects = () => {
           {ProjectsData.map((project) => (
             <Link
               key={project.title}
-              href={`/projects/${toSlug(project.title)}`}
+              href={`/projects/${getProjectSlug(project)}`}
               className="flex items-center justify-between rounded-md border p-3 hover:bg-muted/50 transition-colors group"
             >
               <div className="flex space-x-3 items-center">

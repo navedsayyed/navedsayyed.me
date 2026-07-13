@@ -134,6 +134,7 @@ export const ProjectsData: Projects[] = [
   {
     icon: "/projects/DotDays.png",
     title: "DotDays",
+    slug: "DotDays",
     tagline: "Time-Visualization Wallpaper App",
     date: "2025-06-10",
     repo: "https://github.com/navedsayyed/DotDays",
