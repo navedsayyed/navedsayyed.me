@@ -11,12 +11,12 @@ export const ProjectsData: Projects[] = [
     apkLink:
       "https://github.com/navedsayyed/Snap2Fix-Releases/releases/latest/download/Snap2Fix.apk",
     description: [
-      "Built a role-based campus complaint management mobile application enabling users, technicians, and administrators to track maintenance issues in real time.",
-      "Implemented authentication, complaint submission workflow, and status tracking with backend integration.",
-      "Integrated push notifications using Firebase Cloud Messaging (FCM) and Notifee for real-time alerts.",
-      "Used Supabase (PostgreSQL) for backend services and real-time data synchronization.",
-      "Implemented QR scanning, media upload, and animated UI using React Native libraries.",
-      "Deployed a complementary web platform for complaint management and administration.",
+      "Built a full-stack complaint resolution platform with two connected apps — a public Next.js web portal where users submit and track complaints, and a React Native app for Technicians, Admins, and Super Admins to manage and resolve them — both sharing one real-time Supabase (PostgreSQL) backend.",
+      "Implemented AI-powered complaint routing using Google Gemini: when a user isn't sure which department their issue belongs to, Gemini reads the complaint description and automatically classifies it into the right category with a confidence score, backed by a rule-based floor-and-type matching engine as a fallback for accuracy.",
+      "Engineered a three-layer real-time notification system (Firebase Cloud Messaging, Supabase Realtime, and Notifee) so technicians and users get instant updates whether the app is open, running in the background, or fully closed.",
+      "Enforced role-based data access using Supabase Row Level Security — Technicians only see complaints routed to their department, Admins get department-wide dashboards, and Super Admins have full system oversight.",
+      "Added QR-code-based location tagging so complaints are automatically linked to the exact location they were filed from, plus before/after photo uploads so every resolved complaint has verified proof of work.",
+      "Built live status tracking with a shareable link — even guest users without an account can follow their complaint's progress in real time (Submitted → Assigned → In Progress → Completed) with no page refresh needed.",
     ],
     screenshots: [
       "/projects/snap2fix/ss-1.webp",
@@ -35,10 +35,15 @@ export const ProjectsData: Projects[] = [
       "/projects/snap2fix/ss-14.webp",
     ],
     techStack: [
+      { name: "Next.js", icon: "/tech-icon/nextjs.svg", hasDarkIcon: true },
       { name: "React Native", icon: "/tech-icon/react.svg" },
       { name: "TypeScript", icon: "/tech-icon/typescript.svg" },
       { name: "Supabase", icon: "/tech-icon/supabase.svg" },
+      { name: "Gemini", icon: "/tech-icon/gemini.svg" },
       { name: "Firebase", icon: "/tech-icon/firebase.svg" },
+      { name: "React Hook Form", icon: "/tech-icon/react-hook-form.svg" },
+      { name: "Zod", icon: "/tech-icon/zod.svg" },
+      { name: "Tailwind CSS", icon: "/tech-icon/tailwindcss.svg" },
     ],
   },
   {
@@ -51,11 +56,13 @@ export const ProjectsData: Projects[] = [
     apkLink:
       "https://github.com/navedsayyed/LokalMusic-Releases/releases/latest/download/LokalMusic.apk",
     description: [
-      "Developed a full-featured music streaming mobile application supporting online streaming and offline downloads.",
-      "Integrated JioSaavn API for fetching songs, artists, playlists, and lyrics dynamically.",
-      "Implemented background music playback, playlist management, and queue reordering.",
-      "Built smooth UI animations and gesture-based interactions for enhanced user experience.",
-      "Added offline download functionality using file system storage.",
+      "Built a full-featured, Spotify-style music streaming app in React Native — search for songs, stream them instantly, download for offline listening, build playlists, view synced lyrics, and manage a proper queue system, entirely client-side with no backend, server, or login required.",
+      "Engineered a custom dual-queue playback engine to replicate how Spotify actually handles queueing: a context queue (your current playlist or search results) runs alongside a user queue (songs you manually queue up next), with priority logic that correctly plays your manually queued songs first before falling back to the context queue.",
+      "Implemented shuffle using a proper Fisher-Yates algorithm instead of the common but statistically biased sort(() => Math.random()) trick, so shuffle actually distributes songs fairly — plus a three-state repeat cycle (off → repeat all → repeat one).",
+      "Built resumable offline downloads using expo-file-system, with progress tracking, so a download that gets interrupted can pick back up instead of restarting from zero, and downloaded songs seamlessly swap in as the playback source when offline.",
+      "Wrote a defensive API mapping layer to handle a genuinely messy third-party music API (JioSaavn via a community proxy) that returns inconsistent field names across different endpoints — the mapper tries every known variant so the app doesn't break when the upstream API is inconsistent.",
+      "Chose Zustand over Redux for state management — five separate stores (player, library, settings, theme, UI) with selective subscriptions to avoid unnecessary re-renders, and built-in AsyncStorage persistence with almost none of Redux's boilerplate.",
+      "Added polish throughout: parallax scroll effects on album and artist pages, haptic feedback, animated toast notifications, and drag-to-reorder for the play queue.",
     ],
     screenshots: [
       "/projects/LokalMusic/ss-1.webp",
@@ -79,9 +86,10 @@ export const ProjectsData: Projects[] = [
     ],
     techStack: [
       { name: "React Native", icon: "/tech-icon/react.svg" },
+      { name: "Expo", icon: "/tech-icon/Expo.svg" },
       { name: "TypeScript", icon: "/tech-icon/typescript.svg" },
       { name: "Zustand", icon: "/tech-icon/zustand.svg" },
-      { name: "Expo", icon: "/tech-icon/Expo.svg" },
+      { name: "Axios", icon: "/tech-icon/Axios_vector_logo.svg" },
     ],
   },
   {
@@ -92,11 +100,12 @@ export const ProjectsData: Projects[] = [
     repo: "https://github.com/Hamizkhan08/Grievance-Resolver",
     liveLink: "https://grievanceresolver.vercel.app/",
     description: [
-      "Built an AI-powered grievance management system using 8+ autonomous agents for classification, sentiment analysis, SLA assignment, and escalation.",
-      "Implemented multilingual chatbot support (English, Hindi, Marathi) with voice input/output, real-time tracking, and intelligent complaint routing.",
-      "Developed a full-stack architecture (React + FastAPI) with Supabase integration and LLM support (Groq/OpenAI).",
-      "Designed an agentic AI workflow using LangChain + LangGraph for automated follow-ups, escalation workflows, and citizen communication.",
-      "Included heatmap visualization, complaint status updates, and community discussion features for transparent public grievance handling.",
+      "Built a multi-agent AI system that automates end-to-end citizen complaint resolution for civic issues — not a simple form-and-database app, but a workflow orchestration system where 9 specialized AI agents handle classification, monitoring, and follow-up with minimal human intervention.",
+      "Orchestrated the agents using LangGraph's StateGraph, where a complaint flows through a Classification agent (determines category and urgency), a Sentiment agent (detects emotional tone to boost urgency for distressed citizens), and an SLA Assignment agent (sets realistic deadlines — 15 minutes for fire emergencies, up to several days for routine maintenance issues).",
+      "Built a 4-tier escalation pipeline that automatically escalates unresolved complaints up the chain — from department head to commissioner to chief secretary to the CM's office — if SLA deadlines are breached, with an hourly Monitoring agent scanning the system for breaches in the background.",
+      "Designed a provider-agnostic LLM abstraction layer supporting both Groq (primary, for speed) and OpenAI (fallback), so the system isn't locked into a single AI provider and can swap providers through a simple environment variable.",
+      "Built a React frontend with voice input and output using the Web Speech API, so citizens who prefer speaking over typing can file and track complaints hands-free, along with map-based location picking and full multilingual support across English, Hindi, and Marathi.",
+      "Added a community forum where citizens can view and upvote each other's complaints, helping crowdsource which issues matter most in a given area — complete with image uploads handled through Supabase Storage.",
     ],
     screenshots: [
       "/projects/grievance-resolver/ss-1.webp",
@@ -114,9 +123,45 @@ export const ProjectsData: Projects[] = [
     techStack: [
       { name: "React", icon: "/tech-icon/react.svg" },
       { name: "TypeScript", icon: "/tech-icon/typescript.svg" },
+      { name: "Python", icon: "/tech-icon/python.svg" },
       { name: "FastAPI", icon: "/tech-icon/python.svg" },
-      { name: "LangChain", icon: "/tech-icon/openai.svg" },
+      { name: "LangChain", icon: "/tech-icon/langchain.svg" },
+      { name: "LangGraph", icon: "/tech-icon/langgraph-color.svg" },
       { name: "Supabase", icon: "/tech-icon/supabase.svg" },
+      { name: "OpenAI", icon: "/tech-icon/openai.svg", hasDarkIcon: true },
+    ],
+  },
+  {
+    icon: "/projects/DotDays.png",
+    title: "DotDays",
+    tagline: "Time-Visualization Wallpaper App",
+    date: "2025-06-10",
+    repo: "https://github.com/navedsayyed/DotDays",
+    apkLink:
+      "https://github.com/navedsayyed/DotDays/releases/latest/download/DotDays.apk",
+    description: [
+      "Built a native Android wallpaper app that visualizes time — a year, your life expectancy, or a custom personal goal — as a grid of dots that auto-updates every day at midnight to show real progress against a deadline.",
+      "Solved a genuinely hard platform problem: Android manufacturers like Xiaomi, Samsung, and Realme aggressively kill background tasks to save battery, and often mishandle wallpaper targeting — sometimes overwriting both your lock screen and home screen even when only one was requested.",
+      "Engineered a 4-layer redundant background execution system to guarantee the daily update actually happens: an exact-time alarm set for just after midnight, a custom boot receiver that re-registers the schedule after every reboot, a pre-check receiver that fires 10 minutes early to catch changes in advance, and a process-level hook in the app's entry point as a final safety net.",
+      "Built a headless rendering pipeline using raw Flutter dart:ui Canvas APIs — no widget tree at all — so the wallpaper image generated silently in the background is pixel-for-pixel identical to what you see in the in-app preview, even though background and foreground code run on entirely different Flutter engine instances.",
+      "Designed a native Kotlin wallpaper-ID detection and restoration system that tracks Android's internal wallpaper identifiers, so if a manufacturer's OS incorrectly overwrites your other screen, the app silently detects it and restores your original wallpaper there — without you ever noticing the bug happened.",
+      "Solo-built end to end: Flutter UI, Riverpod state management, and native Kotlin platform code, with the complexity concentrated almost entirely in background execution reliability rather than business logic — a genuinely deep systems problem for a wallpaper app.",
+    ],
+    screenshots: [
+      "/projects/DotDays/ss-1.webp",
+      "/projects/DotDays/ss-2.webp",
+      "/projects/DotDays/ss-3.webp",
+      "/projects/DotDays/ss-4.webp",
+      "/projects/DotDays/ss-5.webp",
+      "/projects/DotDays/ss-6.webp",
+      "/projects/DotDays/ss-7.webp",
+      "/projects/DotDays/ss-8.webp",
+    ],
+    techStack: [
+      { name: "Flutter", icon: "/tech-icon/flutter.svg" },
+      { name: "Dart", icon: "/tech-icon/dart.svg" },
+      { name: "Kotlin", icon: "/tech-icon/kotlin.svg" },
+      { name: "Android", icon: "/tech-icon/android.svg" },
     ],
   },
   {
@@ -129,11 +174,12 @@ export const ProjectsData: Projects[] = [
     apkLink:
       "https://github.com/navedsayyed/MenuForge-Releases/releases/latest/download/MenuForge.apk",
     description: [
-      "Developed a mobile application for restaurant owners to manage menu items, generate QR codes, and create digital menus.",
-      "Implemented CRUD operations for menu management with backend integration.",
-      "Enabled QR-based menu sharing and automatic PDF menu generation for restaurants.",
-      "Built reusable UI components and structured navigation for scalable architecture.",
-      "Implemented media upload and sharing functionality within the application.",
+      "Built a cross-platform mobile app in React Native that lets restaurant owners manage their entire menu — create, edit, and organize dishes with images, generate QR codes, and share digital menus with customers instantly, no printing required.",
+      "Solved a real platform-level compatibility issue: React Native's file handling wasn't compatible with the Appwrite SDK's standard file upload method, causing uploads to fail silently. Engineered a fallback upload path using base64 encoding combined with multipart form data and JWT authentication, tracing the actual data flow rather than trusting the surface-level error to find the real mismatch.",
+      "Designed a custom HTML-to-PDF export pipeline that generates professional, templated, print-ready menus directly from the app — restaurant owners can hand out a physical menu or print one for the counter without needing any external design tool, complete with QR codes linking each dish to its live image.",
+      "Built full CRUD functionality for dish management — create, edit, delete, and organize dishes by category (Appetizer, Main Course, Dessert, Beverage, etc.) — backed by Appwrite for authentication, database, and file storage.",
+      "Delivered a clean, fully-typed codebase (100% TypeScript, no any types) with a feature-based architecture, smooth native UX including animated headers, theming, and proper safe-area handling across different device sizes.",
+      "Built with production-mindedness from the start — the auth flow, image handling, and offline persistence (AsyncStorage) were all built with real restaurant usage in mind, not just as a demo.",
     ],
     screenshots: [
       "/projects/MenuForge/ss-1.webp",
