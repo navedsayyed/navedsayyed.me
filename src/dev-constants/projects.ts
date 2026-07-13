@@ -137,8 +137,7 @@ export const ProjectsData: Projects[] = [
     tagline: "Time-Visualization Wallpaper App",
     date: "2025-06-10",
     repo: "https://github.com/navedsayyed/DotDays",
-    apkLink:
-      "https://github.com/navedsayyed/DotDays/releases/latest/download/DotDays.apk",
+    apkLink: "https://github.com/navedsayyed/DotDays/releases/latest/download/DotDays.apk",
     description: [
       "Built a native Android wallpaper app that visualizes time — a year, your life expectancy, or a custom personal goal — as a grid of dots that auto-updates every day at midnight to show real progress against a deadline.",
       "Solved a genuinely hard platform problem: Android manufacturers like Xiaomi, Samsung, and Realme aggressively kill background tasks to save battery, and often mishandle wallpaper targeting — sometimes overwriting both your lock screen and home screen even when only one was requested.",
