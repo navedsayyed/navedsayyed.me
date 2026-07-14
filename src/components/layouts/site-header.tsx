@@ -50,7 +50,7 @@ const SiteHeader = () => {
         style={{ y: marginTop, paddingLeft: sideMargin, paddingRight: sideMargin }}
       >
         <motion.header
-          className="flex items-center justify-between gap-3 bg-background/90 backdrop-blur-xl mx-auto w-full px-4 h-12 will-change-[max-width,border-radius]"
+          className="flex items-center justify-between gap-3 bg-background/90 backdrop-blur-xl mx-auto w-full px-4 h-14 will-change-[max-width,border-radius]"
           style={{
             borderRadius,
             maxWidth,
