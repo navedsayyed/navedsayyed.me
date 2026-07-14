@@ -31,11 +31,14 @@ const SiteHeader = () => {
 
   // Container shape
   const borderRadius = useTransform(progress, [0, 1], [0, 9999]);
-  const maxWidth = useTransform(progress, [0, 1], [672, 340]);
-  const height = useTransform(progress, [0, 1], [56, 44]);
+  const maxWidth = useTransform(progress, [0, 1], [672, 360]);
 
   // Floating offset
   const marginTop = useTransform(progress, [0, 1], [0, 10]);
+
+  // Side shrink (for small screens where maxWidth doesn't help)
+  const sideMargin = useTransform(progress, [0, 1], [0, 16]);
+
 
   // Shadow
   const shadowAlpha = useTransform(progress, [0, 1], [0, 0.12]);
@@ -49,29 +52,26 @@ const SiteHeader = () => {
   const bottomBorderAlpha = useTransform(progress, [0, 1], [0.15, 0]);
   const bottomBorderColor = useMotionTemplate`rgba(128, 128, 128, ${bottomBorderAlpha})`;
 
-  // Text sizing
-  const fontSize = useTransform(progress, [0, 1], [18, 14]);
-  const navFontSize = useTransform(progress, [0, 1], [14, 13]);
+
 
   // Arrow icon fade-out
   const arrowOpacity = useTransform(progress, [0, 0.5], [1, 0]);
   const arrowScale = useTransform(progress, [0, 0.5], [1, 0.5]);
 
-  // Nav gap
-  const navGap = useTransform(progress, [0, 1], [8, 2]);
+  // Overall gap between all items
+  const headerGap = useTransform(progress, [0, 1], [16, 4]);
 
   return (
     <div className="sticky top-0 z-50">
       <motion.div
-        className="flex justify-center"
-        style={{ paddingTop: marginTop }}
+        className="flex justify-center will-change-transform"
+        style={{ y: marginTop, paddingLeft: sideMargin, paddingRight: sideMargin }}
       >
         <motion.header
-          className="flex items-center justify-between bg-background/90 backdrop-blur-xl mx-auto w-full px-8 md:px-4"
+          className="flex items-center justify-between gap-3 bg-background/90 backdrop-blur-xl mx-auto w-full px-4 h-12 will-change-[max-width,border-radius]"
           style={{
             borderRadius,
             maxWidth,
-            height,
             boxShadow,
             borderWidth: 1,
             borderStyle: "solid",
@@ -85,7 +85,7 @@ const SiteHeader = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full size-9"
+                className="rounded-full size-9 shrink-0"
                 onClick={() => router.back()}
                 aria-label="Go back"
               >
@@ -93,28 +93,22 @@ const SiteHeader = () => {
               </Button>
             )}
             {isHome && (
-              <Link href="/" className="flex items-center">
-                <motion.span
-                  className="font-medium inline-block"
-                  style={{ fontSize }}
-                >
-                  Naveddddd.
-                </motion.span>
+              <Link href="/" className="flex items-center shrink-0">
+                <span className="font-medium inline-block text-lg">Naveddddd.</span>
               </Link>
             )}
           </div>
 
           {/* Nav */}
-          <motion.nav
+          <nav
             aria-label="Main navigation"
-            className="flex items-center"
-            style={{ gap: navGap }}
+            className="flex items-center gap-2 shrink-0"
           >
             <Link
               href="/blog"
-              className="flex items-center justify-center text-muted-foreground hover:text-primary transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+              className="flex items-center justify-center text-muted-foreground hover:text-primary transition-colors duration-500 shrink-0 rounded-sm"
             >
-              <motion.span style={{ fontSize: navFontSize }}>blog</motion.span>
+              <span className="text-sm">blog</span>
               <motion.span
                 style={{ opacity: arrowOpacity, scale: arrowScale }}
                 className="inline-flex"
@@ -124,7 +118,7 @@ const SiteHeader = () => {
             </Link>
             <GitHubButtons />
             <ThemeSwitcher />
-          </motion.nav>
+          </nav>
         </motion.header>
       </motion.div>
     </div>
