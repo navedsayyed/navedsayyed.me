@@ -1,12 +1,7 @@
 "use client";
 
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import {
-  motion,
-  useMotionTemplate,
-  useScroll,
-  useTransform,
-} from "motion/react";
+import { motion, useMotionTemplate, useScroll, useTransform } from "motion/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
