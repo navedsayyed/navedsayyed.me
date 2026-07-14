@@ -4,27 +4,20 @@ import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import {
   motion,
   useMotionTemplate,
-  useMotionValueEvent,
   useScroll,
   useTransform,
 } from "motion/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { GitHubButtons } from "@/components/ui/extended/github-buttons";
 import ThemeSwitcher from "@/components/ui/extended/theme-switcher";
 
 const SiteHeader = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === "/";
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 10);
-  });
 
   // ── Scroll-driven interpolations (0px → 80px scroll range) ──
   const progress = useTransform(scrollY, [0, 80], [0, 1], { clamp: true });
@@ -39,7 +32,6 @@ const SiteHeader = () => {
   // Side shrink (for small screens where maxWidth doesn't help)
   const sideMargin = useTransform(progress, [0, 1], [0, 16]);
 
-
   // Shadow
   const shadowAlpha = useTransform(progress, [0, 1], [0, 0.12]);
   const boxShadow = useMotionTemplate`0 8px 32px rgba(0, 0, 0, ${shadowAlpha})`;
@@ -52,14 +44,9 @@ const SiteHeader = () => {
   const bottomBorderAlpha = useTransform(progress, [0, 1], [0.15, 0]);
   const bottomBorderColor = useMotionTemplate`rgba(128, 128, 128, ${bottomBorderAlpha})`;
 
-
-
   // Arrow icon fade-out
   const arrowOpacity = useTransform(progress, [0, 0.5], [1, 0]);
   const arrowScale = useTransform(progress, [0, 0.5], [1, 0.5]);
-
-  // Overall gap between all items
-  const headerGap = useTransform(progress, [0, 1], [16, 4]);
 
   return (
     <div className="sticky top-0 z-50">
@@ -100,10 +87,7 @@ const SiteHeader = () => {
           </div>
 
           {/* Nav */}
-          <nav
-            aria-label="Main navigation"
-            className="flex items-center gap-2 shrink-0"
-          >
+          <nav aria-label="Main navigation" className="flex items-center gap-2 shrink-0">
             <Link
               href="/blog"
               className="flex items-center justify-center text-muted-foreground hover:text-primary transition-colors duration-500 shrink-0 rounded-sm"
