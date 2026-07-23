@@ -1,21 +1,21 @@
 import { ArrowUpRight } from "lucide-react";
 import {
-    BlogCard,
-    BlogCardContent,
-    BlogCardDescription,
-    BlogCardFooter,
-    BlogCardImage,
-    BlogCardTitle,
+  BlogCard,
+  BlogCardContent,
+  BlogCardDescription,
+  BlogCardFooter,
+  BlogCardImage,
+  BlogCardTitle,
 } from "@/components/blog/blogs-card";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-    ExpandableSection,
-    ExpandableSectionDescription,
-    ExpandableSectionHeader,
-    ExpandableSectionLabel,
-    ExpandableSectionList,
-    ExpandableSectionTitle,
+  ExpandableSection,
+  ExpandableSectionDescription,
+  ExpandableSectionHeader,
+  ExpandableSectionLabel,
+  ExpandableSectionList,
+  ExpandableSectionTitle,
 } from "@/components/ui/extended/expandable-section";
 import { DeveloperDetails } from "@/dev-constants/details";
 import type { BlogPost } from "@/lib/markdown/mdx";
@@ -70,7 +70,10 @@ export const BlogsGrid = ({ posts, maxPosts }: BlogsGridProps) => {
                           <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300">
                             {DeveloperDetails.name}
                           </p>
-                          <time dateTime={frontmatter.date} className="text-sm text-muted-foreground">
+                          <time
+                            dateTime={frontmatter.date}
+                            className="text-sm text-muted-foreground"
+                          >
                             {new Date(frontmatter.date).toLocaleDateString("en-US", {
                               year: "numeric",
                               month: "short",
