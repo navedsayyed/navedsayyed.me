@@ -15,7 +15,9 @@ const PageShellWrapper = ({
 }) => {
   return (
     <div className="relative grid min-h-screen w-full grid-cols-[minmax(0,1fr)_2rem_minmax(0,auto)_2rem_minmax(0,1fr)] grid-rows-[1fr_1px_auto_1px_1fr] overflow-x-hidden  [--pattern-fg:var(--muted)]">
-      <div className={`col-start-3 row-start-3 flex w-full flex-col items-stretch ${contentClassName}`}>
+      <div
+        className={`col-start-3 row-start-3 flex w-full flex-col items-stretch ${contentClassName}`}
+      >
         {children}
       </div>
       <div className="relative -right-px col-start-2 row-span-full row-start-1 border-x border-x-(--pattern-fg) bg-[repeating-linear-gradient(315deg,var(--pattern-fg)_0,var(--pattern-fg)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed" />
