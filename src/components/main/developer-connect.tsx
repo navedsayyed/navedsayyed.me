@@ -58,14 +58,14 @@ const DeveloperConnect = () => {
       </ShellWrapper>
       <HatchDivider />
       <ShellWrapper>
-        <div className="space-y-4 border p-4 bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">
+        <div className="space-y-4 overflow-hidden border p-4 bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">
           <div className="space-y-1">
             <h2 className="text-2xl font-medium text-foreground">Prefer a direct line?</h2>
             <p className="text-sm text-muted-foreground">
               Email lands straight in my inbox and my resume is updated with every new engagement.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex gap-2">
             {DeveloperDetails.email && (
               <Button asChild>
                 <Link href={`mailto:${DeveloperDetails.email}`}>
@@ -78,7 +78,7 @@ const DeveloperConnect = () => {
               <Button variant="outline" asChild>
                 <Link href={DeveloperDetails.resume} target="_blank" rel="noreferrer noopener">
                   <FileText className="size-4" />
-                  Download Resume
+                  Resume
                 </Link>
               </Button>
             )}
