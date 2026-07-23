@@ -1,5 +1,6 @@
 import { ArrowUpRight, FileText, Mail } from "lucide-react";
 import Link from "next/link";
+import { HatchDivider } from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
 import { Button } from "@/components/ui/button";
 import ThemedIcon from "@/components/ui/extended/themed-icon";
@@ -55,37 +56,34 @@ const DeveloperConnect = () => {
           </div>
         </div>
       </ShellWrapper>
+      <HatchDivider />
       <ShellWrapper>
-        <section className="space-y-4 p-2 bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">
-          <div className="flex flex-col space-y-2">
-            <div className="space-y-1">
-              <h2 className="text-2xl font-medium text-foreground">Prefer a direct line?</h2>
-              <p className="text-sm text-muted-foreground">
-                Email lands straight in my inbox and my resume is updated with every new engagement.
-              </p>
-            </div>
-            <ShellWrapper>
-              <div className="flex flex-wrap gap-2">
-                {DeveloperDetails.email && (
-                  <Button asChild>
-                    <Link href={`mailto:${DeveloperDetails.email}`}>
-                      <Mail className="size-4" />
-                      Email Me
-                    </Link>
-                  </Button>
-                )}
-                {DeveloperDetails.resume && (
-                  <Button variant="outline" asChild>
-                    <Link href={DeveloperDetails.resume} target="_blank" rel="noreferrer noopener">
-                      <FileText className="size-4" />
-                      Download Resume
-                    </Link>
-                  </Button>
-                )}
-              </div>
-            </ShellWrapper>
+        <div className="space-y-4 border p-4 bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-medium text-foreground">Prefer a direct line?</h2>
+            <p className="text-sm text-muted-foreground">
+              Email lands straight in my inbox and my resume is updated with every new engagement.
+            </p>
           </div>
-        </section>
+          <div className="flex flex-wrap gap-2">
+            {DeveloperDetails.email && (
+              <Button asChild>
+                <Link href={`mailto:${DeveloperDetails.email}`}>
+                  <Mail className="size-4" />
+                  Email Me
+                </Link>
+              </Button>
+            )}
+            {DeveloperDetails.resume && (
+              <Button variant="outline" asChild>
+                <Link href={DeveloperDetails.resume} target="_blank" rel="noreferrer noopener">
+                  <FileText className="size-4" />
+                  Download Resume
+                </Link>
+              </Button>
+            )}
+          </div>
+        </div>
       </ShellWrapper>
     </>
   );
