@@ -4,7 +4,7 @@ import { DotIcon, Download, ExternalLink, FileText, Github } from "lucide-react"
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import PageShellWrapper from "@/components/layouts/page-shell";
+import PageShellWrapper, { HatchDivider } from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
 import { Button } from "@/components/ui/button";
 import ScreenshotLightbox from "@/components/ui/extended/screenshot-lightbox";
@@ -70,10 +70,10 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
   if (!project) notFound();
 
   return (
-    <PageShellWrapper>
+    <PageShellWrapper contentClassName="flex flex-col">
       {/* Header — same hatched-bg pattern as BlogHeader */}
       <ShellWrapper>
-        <header className="space-y-4 p-4 bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">
+        <header className="space-y-4 p-4">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <div className="bg-muted h-10 w-10 flex items-center justify-center border rounded-lg shrink-0">
@@ -139,6 +139,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
           </div>
         </header>
       </ShellWrapper>
+      <HatchDivider />
 
       {/* Cover block — commented out */}
       {/* <ShellWrapper>
@@ -172,6 +173,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
         </ShellWrapper>
       )}
 
+      <HatchDivider />
       {/* Content — same pattern as blog article ShellWrapper */}
       <ShellWrapper>
         <article className="p-2 space-y-8">
