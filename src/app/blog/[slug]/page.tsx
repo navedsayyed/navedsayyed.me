@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { BlogHeader } from "@/components/blog/blog-header";
-import PageShellWrapper from "@/components/layouts/page-shell";
+import PageShellWrapper, { HatchDivider } from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
 import { DeveloperDetails } from "@/dev-constants/details";
 import { getAllBlogSlugs, getBlogPostBySlug, mdxOptions } from "@/lib/markdown/mdx";
@@ -148,10 +148,9 @@ const BlogPostPage = async ({ params }: BlogPostPageProps) => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <PageShellWrapper>
-        <ShellWrapper>
-          <BlogHeader frontmatter={post.frontmatter} readingTime={post.readingTime} />
-        </ShellWrapper>
+      <PageShellWrapper contentClassName="flex flex-col">
+        <BlogHeader frontmatter={post.frontmatter} readingTime={post.readingTime} />
+        <HatchDivider />
         <ShellWrapper>
           <article className="p-2 text-justify">
             <MDXRemote source={post.content} components={components} options={mdxOptions} />

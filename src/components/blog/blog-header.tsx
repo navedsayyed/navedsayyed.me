@@ -1,5 +1,6 @@
 import { Calendar, Clock } from "lucide-react";
 import Image from "next/image";
+import { HatchDivider } from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DeveloperDetails } from "@/dev-constants/details";
@@ -14,7 +15,7 @@ export function BlogHeader({ frontmatter, readingTime }: BlogHeaderProps) {
   return (
     <>
       <ShellWrapper>
-        <header className="space-y-3 p-2 bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">
+        <header className="space-y-3 p-2">
           <div className="space-y-2">
             <h1 className="text-3xl font-medium tracking-tight text-foreground md:text-4xl">
               {frontmatter.title}
@@ -54,7 +55,7 @@ export function BlogHeader({ frontmatter, readingTime }: BlogHeaderProps) {
           </div>
         </header>
       </ShellWrapper>
-
+      <HatchDivider />
       <ShellWrapper>
         {frontmatter.image && (
           <div className="overflow-hidden bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">

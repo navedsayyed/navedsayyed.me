@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { BlogIntroduction, BlogsGrid, NoMoreBlogs } from "@/components/blog";
-import PageShellWrapper from "@/components/layouts/page-shell";
+import PageShellWrapper, { HatchDivider } from "@/components/layouts/page-shell";
 import { DeveloperDetails } from "@/dev-constants/details";
 import { getAllBlogPosts } from "@/lib/markdown";
 import { blogMetadata } from "@/lib/seo-utils";
@@ -64,9 +64,11 @@ const BlogPage = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd) }}
       />
-      <PageShellWrapper>
+      <PageShellWrapper contentClassName="flex flex-col">
         <BlogIntroduction />
+        <HatchDivider />
         <BlogsGrid posts={posts} />
+        <HatchDivider />
         <NoMoreBlogs />
       </PageShellWrapper>
     </>
