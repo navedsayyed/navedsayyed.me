@@ -12,6 +12,14 @@ import {
   ContributionGraphLegend,
   ContributionGraphTotalCount,
 } from "@/components/ui/extended/contribution-graph";
+import {
+  ExpandableSection,
+  ExpandableSectionDescription,
+  ExpandableSectionHeader,
+  ExpandableSectionLabel,
+  ExpandableSectionList,
+  ExpandableSectionTitle,
+} from "@/components/ui/extended/expandable-section";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
@@ -87,60 +95,72 @@ const DeveloperGitContribution = () => {
 
   return (
     <ShellWrapper>
-      <ContributionGraph
-        data={activities}
-        totalCount={totalCount}
-        className="p-2"
-        labels={{ totalCount: "{{count}} activities in past 12 months" }}
-      >
-        <ContributionGraphCalendar scrollToEnd>
-          {({ activity, dayIndex, weekIndex }) => (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <ContributionGraphBlock
-                  activity={activity}
-                  className={cn(
-                    "cursor-pointer",
-                    'data-[level="0"]:fill-[#ebedf0] dark:data-[level="0"]:fill-[#161b22]',
-                    'data-[level="1"]:fill-[#9be9a8] dark:data-[level="1"]:fill-[#0e4429]',
-                    'data-[level="2"]:fill-[#40c463] dark:data-[level="2"]:fill-[#006d32]',
-                    'data-[level="3"]:fill-[#30a14e] dark:data-[level="3"]:fill-[#26a641]',
-                    'data-[level="4"]:fill-[#216e39] dark:data-[level="4"]:fill-[#39d353]'
-                  )}
-                  dayIndex={dayIndex}
-                  weekIndex={weekIndex}
-                />
-              </TooltipTrigger>
-              <TooltipContent>
-                <span className="font-medium">{activity.count} contributions</span>
-                <span> on </span>
-                <span>{format(parseISO(activity.date), "MMM d, yyyy")}</span>
-              </TooltipContent>
-            </Tooltip>
-          )}
-        </ContributionGraphCalendar>
-        <ContributionGraphFooter>
-          <ContributionGraphTotalCount />
-          <ContributionGraphLegend>
-            {({ level }) => (
-              <div
-                className="group relative flex h-3 w-3 items-center justify-center"
-                data-level={level}
-              >
-                <div
-                  className={cn(
-                    "h-full w-full rounded border border-border",
-                    legendLevelClasses[level] ?? legendLevelClasses[0]
-                  )}
-                />
-                <span className="-top-8 absolute hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block">
-                  Level {level}
-                </span>
-              </div>
-            )}
-          </ContributionGraphLegend>
-        </ContributionGraphFooter>
-      </ContributionGraph>
+      <ExpandableSection>
+        <ExpandableSectionHeader>
+          <ExpandableSectionLabel>My Activity</ExpandableSectionLabel>
+          <ExpandableSectionTitle>GitHub Contributions</ExpandableSectionTitle>
+          <ExpandableSectionDescription>
+            A visual snapshot of my coding activity and consistency over the past year.
+          </ExpandableSectionDescription>
+        </ExpandableSectionHeader>
+
+        <ExpandableSectionList>
+          <ContributionGraph
+            data={activities}
+            totalCount={totalCount}
+            className="p-2"
+            labels={{ totalCount: "{{count}} activities in past 12 months" }}
+          >
+            <ContributionGraphCalendar scrollToEnd>
+              {({ activity, dayIndex, weekIndex }) => (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <ContributionGraphBlock
+                      activity={activity}
+                      className={cn(
+                        "cursor-pointer",
+                        'data-[level="0"]:fill-[#ebedf0] dark:data-[level="0"]:fill-[#161b22]',
+                        'data-[level="1"]:fill-[#9be9a8] dark:data-[level="1"]:fill-[#0e4429]',
+                        'data-[level="2"]:fill-[#40c463] dark:data-[level="2"]:fill-[#006d32]',
+                        'data-[level="3"]:fill-[#30a14e] dark:data-[level="3"]:fill-[#26a641]',
+                        'data-[level="4"]:fill-[#216e39] dark:data-[level="4"]:fill-[#39d353]'
+                      )}
+                      dayIndex={dayIndex}
+                      weekIndex={weekIndex}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <span className="font-medium">{activity.count} contributions</span>
+                    <span> on </span>
+                    <span>{format(parseISO(activity.date), "MMM d, yyyy")}</span>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+            </ContributionGraphCalendar>
+            <ContributionGraphFooter>
+              <ContributionGraphTotalCount />
+              <ContributionGraphLegend>
+                {({ level }) => (
+                  <div
+                    className="group relative flex h-3 w-3 items-center justify-center"
+                    data-level={level}
+                  >
+                    <div
+                      className={cn(
+                        "h-full w-full rounded border border-border",
+                        legendLevelClasses[level] ?? legendLevelClasses[0]
+                      )}
+                    />
+                    <span className="-top-8 absolute hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block">
+                      Level {level}
+                    </span>
+                  </div>
+                )}
+              </ContributionGraphLegend>
+            </ContributionGraphFooter>
+          </ContributionGraph>
+        </ExpandableSectionList>
+      </ExpandableSection>
     </ShellWrapper>
   );
 };
