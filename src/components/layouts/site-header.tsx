@@ -46,11 +46,11 @@ const SiteHeader = () => {
   return (
     <div className="sticky top-0 z-50">
       <motion.div
-        className="flex justify-center will-change-transform"
+        className="flex justify-center"
         style={{ y: marginTop, paddingLeft: sideMargin, paddingRight: sideMargin }}
       >
         <motion.header
-          className="flex items-center justify-between gap-3 bg-background/90 backdrop-blur-xl mx-auto w-full px-4 h-14 will-change-[max-width,border-radius]"
+          className="flex items-center justify-between gap-3 bg-background/95 mx-auto w-full px-4 h-14"
           style={{
             borderRadius,
             maxWidth,

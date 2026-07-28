@@ -81,6 +81,17 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Performance optimizations */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
 }
 
 /* Shiki dual theme support for code blocks */
