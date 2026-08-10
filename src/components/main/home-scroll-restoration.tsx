@@ -96,9 +96,15 @@ const HomeScrollRestoration = () => {
       return;
     }
 
+    document.documentElement.dataset.scrollRestoring = "true";
+
+    const stopRestoring = () => {
+      delete document.documentElement.dataset.scrollRestoring;
+    };
     const restore = () => window.scrollTo({ top: savedScrollY, behavior: "auto" });
     const animationFrame = window.requestAnimationFrame(restore);
     const timeouts = [0, 50, 150, 300].map((delay) => window.setTimeout(restore, delay));
+    const stopRestoringTimeout = window.setTimeout(stopRestoring, 450);
 
     removeStateRestoreFlag();
     try {
@@ -107,7 +113,9 @@ const HomeScrollRestoration = () => {
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
+      window.clearTimeout(stopRestoringTimeout);
       timeouts.forEach(window.clearTimeout);
+      stopRestoring();
     };
   }, [pathname]);
 
