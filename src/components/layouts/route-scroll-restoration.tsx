@@ -18,7 +18,7 @@ function isBlogPostPath(pathname: string) {
 function shouldOpenFreshAtTop(pathname: string, previousPathname: string | null) {
   return (
     (pathname.startsWith(PROJECT_PATH_PREFIX) && previousPathname === HOME_PATH) ||
-    (pathname === BLOG_PATH && previousPathname === HOME_PATH) ||
+    (pathname === BLOG_PATH && !isBlogPostPath(previousPathname ?? "")) ||
     (isBlogPostPath(pathname) && (previousPathname === HOME_PATH || previousPathname === BLOG_PATH))
   );
 }
@@ -63,10 +63,11 @@ function removeStateRestoreFlag() {
 }
 
 function instantScrollTo(top: number) {
-  document.documentElement.dataset.scrollRestoring = "true";
+  const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = "auto";
 
   const stopRestoring = () => {
-    delete document.documentElement.dataset.scrollRestoring;
+    document.documentElement.style.scrollBehavior = previousScrollBehavior;
   };
   const restore = () => window.scrollTo({ top, behavior: "auto" });
   const animationFrame = window.requestAnimationFrame(restore);
@@ -106,7 +107,7 @@ export function saveHomeScrollPosition() {
   }
 }
 
-const HomeScrollRestoration = () => {
+const RouteScrollRestoration = () => {
   const pathname = usePathname();
   const previousPathnameRef = useRef<string | null>(null);
   const lastBlogScrollYRef = useRef(0);
@@ -173,4 +174,4 @@ const HomeScrollRestoration = () => {
   return null;
 };
 
-export default HomeScrollRestoration;
+export default RouteScrollRestoration;

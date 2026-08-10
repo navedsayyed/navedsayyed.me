@@ -85,10 +85,6 @@
   html {
     scroll-behavior: smooth;
   }
-
-  html[data-scroll-restoring="true"] {
-    scroll-behavior: auto;
-  }
 }
 
 /* Shiki dual theme support for code blocks */

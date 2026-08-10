@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { saveHomeScrollPosition } from "@/components/main/home-scroll-restoration";
+import { saveHomeScrollPosition } from "@/components/layouts/route-scroll-restoration";
 
 interface ProjectNavigationLinkProps {
   children: ReactNode;
