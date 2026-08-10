@@ -15,7 +15,7 @@ const BlogCard = React.forwardRef<HTMLDivElement, BlogCardProps>(
       className={cn("rounded border hover:shadow-md transition", className)}
       {...props}
     >
-      <Link href={link} className="block h-full w-full">
+      <Link href={link} className="block h-full w-full" scroll={false}>
         {children}
       </Link>
     </div>

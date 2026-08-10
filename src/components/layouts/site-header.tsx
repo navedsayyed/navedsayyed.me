@@ -85,6 +85,7 @@ const SiteHeader = () => {
           <nav aria-label="Main navigation" className="flex items-center gap-2 shrink-0">
             <Link
               href="/blog"
+              scroll={false}
               className="flex items-center justify-center text-muted-foreground hover:text-primary transition-colors duration-500 shrink-0 rounded-sm"
             >
               <span className="text-sm">blog</span>
