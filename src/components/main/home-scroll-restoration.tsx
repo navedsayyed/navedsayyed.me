@@ -33,6 +33,25 @@ function removeStateRestoreFlag() {
   }
 }
 
+function instantScrollTo(top: number) {
+  document.documentElement.dataset.scrollRestoring = "true";
+
+  const stopRestoring = () => {
+    delete document.documentElement.dataset.scrollRestoring;
+  };
+  const restore = () => window.scrollTo({ top, behavior: "auto" });
+  const animationFrame = window.requestAnimationFrame(restore);
+  const timeouts = [0, 50, 150, 300].map((delay) => window.setTimeout(restore, delay));
+  const stopRestoringTimeout = window.setTimeout(stopRestoring, 450);
+
+  return () => {
+    window.cancelAnimationFrame(animationFrame);
+    window.clearTimeout(stopRestoringTimeout);
+    timeouts.forEach(window.clearTimeout);
+    stopRestoring();
+  };
+}
+
 export function saveHomeScrollPosition() {
   const scrollY = window.scrollY;
 
@@ -67,6 +86,10 @@ const HomeScrollRestoration = () => {
     const previousPathname = previousPathnameRef.current;
     previousPathnameRef.current = pathname;
 
+    if (pathname.startsWith(PROJECT_PATH_PREFIX) && previousPathname === "/") {
+      return instantScrollTo(0);
+    }
+
     if (pathname !== "/" || !previousPathname?.startsWith(PROJECT_PATH_PREFIX)) {
       return;
     }
@@ -96,27 +119,12 @@ const HomeScrollRestoration = () => {
       return;
     }
 
-    document.documentElement.dataset.scrollRestoring = "true";
-
-    const stopRestoring = () => {
-      delete document.documentElement.dataset.scrollRestoring;
-    };
-    const restore = () => window.scrollTo({ top: savedScrollY, behavior: "auto" });
-    const animationFrame = window.requestAnimationFrame(restore);
-    const timeouts = [0, 50, 150, 300].map((delay) => window.setTimeout(restore, delay));
-    const stopRestoringTimeout = window.setTimeout(stopRestoring, 450);
-
     removeStateRestoreFlag();
     try {
       window.sessionStorage.removeItem(SHOULD_RESTORE_HOME_SCROLL_KEY);
     } catch {}
 
-    return () => {
-      window.cancelAnimationFrame(animationFrame);
-      window.clearTimeout(stopRestoringTimeout);
-      timeouts.forEach(window.clearTimeout);
-      stopRestoring();
-    };
+    return instantScrollTo(savedScrollY);
   }, [pathname]);
 
   useEffect(() => {

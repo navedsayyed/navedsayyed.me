@@ -12,7 +12,7 @@ interface ProjectNavigationLinkProps {
 
 const ProjectNavigationLink = ({ children, className, href }: ProjectNavigationLinkProps) => {
   return (
-    <Link href={href} className={className} onClick={saveHomeScrollPosition}>
+    <Link href={href} className={className} onClick={saveHomeScrollPosition} scroll={false}>
       {children}
     </Link>
   );
