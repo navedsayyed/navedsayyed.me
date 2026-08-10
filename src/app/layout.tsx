@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { PortfolioChatbot } from "@/components/chatbot";
 import SiteFooter from "@/components/layouts/site-footer";
 import SiteHeader from "@/components/layouts/site-header";
+import HomeScrollRestoration from "@/components/main/home-scroll-restoration";
 import { DeveloperDetails } from "@/dev-constants/details";
 
 const siteUrl = DeveloperDetails.portfolio.replace(/\/$/, "");
@@ -140,6 +141,7 @@ export default function RootLayout({
           >
             Skip to main content
           </a>
+          <HomeScrollRestoration />
           <SiteHeader />
           <main id="main-content">{children}</main>
           <SiteFooter />

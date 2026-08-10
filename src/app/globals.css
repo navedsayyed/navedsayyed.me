@@ -82,15 +82,12 @@
     @apply bg-background text-foreground;
   }
 
-  /* Performance optimizations */
   html {
     scroll-behavior: smooth;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    html {
-      scroll-behavior: smooth;
-    }
+  html[data-scroll-restoring="true"] {
+    scroll-behavior: auto;
   }
 }
 

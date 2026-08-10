@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
+import ProjectNavigationLink from "@/components/main/project-navigation-link";
 import {
   ExpandableSection,
   ExpandableSectionDescription,
@@ -38,7 +38,7 @@ const DeveloperProjects = () => {
 
         <ExpandableSectionList>
           {ProjectsData.map((project) => (
-            <Link
+            <ProjectNavigationLink
               key={project.title}
               href={`/projects/${getProjectSlug(project)}`}
               className="flex items-center justify-between rounded-md border p-3 hover:bg-muted/50 transition-colors group"
@@ -65,7 +65,7 @@ const DeveloperProjects = () => {
               <span className="text-muted-foreground shrink-0 pl-4 transition-colors group-hover:text-foreground">
                 <ArrowUpRight className="size-4" />
               </span>
-            </Link>
+            </ProjectNavigationLink>
           ))}
         </ExpandableSectionList>
       </ExpandableSection>
