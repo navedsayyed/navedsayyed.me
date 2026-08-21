@@ -65,8 +65,15 @@ const nextConfig: NextConfig = {
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
       },
       {
+        // `immutable` belongs only on content-hashed URLs like /_next/static above, where the
+        // filename changes whenever the bytes do. These are stable /public paths whose contents
+        // get replaced — avatar, OG card, resume — so `immutable` told every browser to keep
+        // the old file for a year and never revalidate, even on reload. Serve them fresh for an
+        // hour, then revalidate in the background against the ETag.
         source: "/(.*\\.(?:webp|png|svg|jpg|jpeg|ico|woff2|woff|pdf))",
-        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=3600, stale-while-revalidate=86400" },
+        ],
       },
     ];
   },
