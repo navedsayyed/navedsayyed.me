@@ -1,45 +1,46 @@
 import ThemedIcon from "@/components/ui/extended/themed-icon";
-import { TechStacksList } from "@/dev-constants/stack";
+import { TechStackGroups } from "@/dev-constants/stack";
 import ShellWrapper from "../layouts/shell-wrapper";
 
 const DeveloperStack = () => {
   return (
-    <ShellWrapper>
-      <div className="relative overflow-hidden p-2 space-y-3">
-        <header className="space-y-2">
-          <div className="space-y-1">
-            <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">My Skills</p>
-            <h2 className="mt-1 text-3xl font-medium tracking-tight text-foreground md:text-4xl">
-              The tools I reach for every day
-            </h2>
-          </div>
-          <p className="text-base leading-relaxed text-justify text-muted-foreground">
-            A curated mix of frameworks, runtimes, and services that help me craft reliable,
-            performant user experiences across the stack.
+    <ShellWrapper wide>
+      <div className="px-2 py-10">
+        <header className="mb-6 space-y-1">
+          <h2 className="text-2xl font-medium tracking-tight text-foreground">Stack</h2>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            What I reach for, day to day — grouped by where it sits in the stack.
           </p>
         </header>
 
-        <div
-          className="grid gap-0 border-l border-t border-border"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(80px, 1fr))" }}
-        >
-          {TechStacksList.map(({ name, icon, hasDarkIcon }) => (
+        <div className="space-y-5">
+          {TechStackGroups.map((group) => (
             <div
-              key={name}
-              className="group flex flex-col items-center justify-center aspect-square p-2 border-r border-b transition-all duration-200 cursor-pointer overflow-hidden"
+              key={group.label}
+              className="grid gap-x-5 gap-y-2 sm:grid-cols-[8rem_minmax(0,1fr)]"
             >
-              <div className="flex items-center justify-center text-foreground/60 group-hover:text-foreground transition-colors duration-200">
-                <ThemedIcon
-                  src={icon}
-                  alt={name}
-                  size={20}
-                  hasDarkVariant={hasDarkIcon}
-                  className="size-4 aspect-square"
-                />
-              </div>
-              <p className="text-xs font-medium text-foreground/70 text-center group-hover:text-foreground transition-colors duration-200 mt-2">
-                {name}
-              </p>
+              <h3 className="pt-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                {group.label}
+              </h3>
+              <ul className="flex flex-wrap gap-1.5">
+                {group.items.map((item) => (
+                  <li
+                    key={`${group.label}-${item.name}`}
+                    className="inline-flex items-center gap-1.5 rounded-md border bg-muted/40 px-2 py-1 text-xs text-foreground/80 transition-colors hover:border-foreground/25 hover:text-foreground"
+                  >
+                    {item.icon && (
+                      <ThemedIcon
+                        src={item.icon}
+                        alt=""
+                        size={16}
+                        hasDarkVariant={item.hasDarkIcon}
+                        className="size-3.5 shrink-0 rounded-[3px]"
+                      />
+                    )}
+                    {item.name}
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
