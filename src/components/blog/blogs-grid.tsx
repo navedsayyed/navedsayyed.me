@@ -22,22 +22,25 @@ import type { BlogPost } from "@/lib/markdown/mdx";
 interface BlogsGridProps {
   posts: BlogPost[];
   maxPosts?: number;
-  /** Homepage uses the roomier column; the /blog index keeps the narrower reading width. */
   wide?: boolean;
+  /** The /blog index already has its own page heading, so the section header is redundant there. */
+  showHeader?: boolean;
 }
 
-export const BlogsGrid = ({ posts, maxPosts, wide = false }: BlogsGridProps) => {
+export const BlogsGrid = ({ posts, maxPosts, wide = false, showHeader = true }: BlogsGridProps) => {
   const displayPosts = maxPosts ? posts.slice(0, maxPosts) : posts;
 
   return (
     <ShellWrapper wide={wide}>
-      <ExpandableSection className="px-2 py-10">
-        <ExpandableSectionHeader className="mb-6 space-y-1">
-          <ExpandableSectionTitle>Writing</ExpandableSectionTitle>
-          <ExpandableSectionDescription>
-            Notes and guides from things I've built.
-          </ExpandableSectionDescription>
-        </ExpandableSectionHeader>
+      <ExpandableSection className={showHeader ? "px-2 py-10" : "px-2 pb-10"}>
+        {showHeader && (
+          <ExpandableSectionHeader className="mb-6 space-y-1">
+            <ExpandableSectionTitle>Writing</ExpandableSectionTitle>
+            <ExpandableSectionDescription>
+              Notes and guides from things I&apos;ve built.
+            </ExpandableSectionDescription>
+          </ExpandableSectionHeader>
+        )}
 
         <ExpandableSectionList>
           {posts.length > 0 ? (

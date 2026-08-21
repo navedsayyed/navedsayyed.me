@@ -4,7 +4,7 @@ import { DotIcon, Download, ExternalLink, FileText, Github } from "lucide-react"
 import Image from "next/image";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
-import PageShellWrapper, { HatchDivider } from "@/components/layouts/page-shell";
+import PageShellWrapper from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
 import { Button } from "@/components/ui/button";
 import ScreenshotLightbox from "@/components/ui/extended/screenshot-lightbox";
@@ -136,7 +136,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
   };
 
   return (
-    <PageShellWrapper contentClassName="flex flex-col">
+    <PageShellWrapper bare contentClassName="flex flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
@@ -145,28 +145,36 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      {/* Header — same hatched-bg pattern as BlogHeader */}
-      <ShellWrapper>
-        <header className="space-y-4 p-4">
+      <ShellWrapper wide>
+        <header className="space-y-4 px-2 pt-12 pb-8">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="bg-muted h-10 w-10 flex items-center justify-center border rounded-lg shrink-0">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border bg-muted">
                 <Image
                   src={project.icon}
                   alt={`${project.title} icon`}
-                  width={32}
-                  height={32}
-                  className="h-8 w-8 rounded object-cover"
+                  width={40}
+                  height={40}
+                  className="h-10 w-10 rounded object-cover"
                 />
               </div>
-              <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-                {project.title}
-              </h1>
+              <div className="min-w-0">
+                <h1 className="text-3xl font-medium tracking-tight text-foreground">
+                  {project.title}
+                </h1>
+                {project.date && (
+                  <span className="font-mono text-xs tabular-nums text-muted-foreground">
+                    {new Date(project.date).getFullYear()}
+                  </span>
+                )}
+              </div>
             </div>
-            <p className="text-base leading-relaxed text-muted-foreground">{project.tagline}</p>
+            <p className="max-w-[68ch] text-[15px] leading-relaxed text-muted-foreground">
+              {project.tagline}
+            </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 pt-1 min-h-9">
+          <div className="flex min-h-9 flex-wrap items-center gap-2 pt-1">
             {hasActionLinks ? (
               <>
                 {project.repo && (
@@ -213,51 +221,28 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
           </div>
         </header>
       </ShellWrapper>
-      <HatchDivider />
-
-      {/* Cover block — commented out */}
-      {/* <ShellWrapper>
-        <div className="overflow-hidden bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">
-          <div className="max-h-96 mx-auto aspect-video border bg-background flex flex-col items-center justify-center gap-4">
-            <Image
-              src={project.icon}
-              alt={`${project.title} cover`}
-              width={96}
-              height={96}
-              className="h-24 w-24 rounded-xl object-cover"
-            />
-            <div className="text-center space-y-1">
-              <p className="text-2xl font-bold text-foreground">{project.title}</p>
-              <p className="text-sm text-muted-foreground">{project.tagline}</p>
-              <p className="text-xs text-muted-foreground/60 mt-2">
-                {DeveloperDetails.portfolio.replace(/^https?:\/\//, "")}
-              </p>
-            </div>
-          </div>
-        </div>
-      </ShellWrapper> */}
 
       {/* Screenshots */}
       {validScreenshots.length > 0 && (
-        <ShellWrapper>
-          <div className="p-2 space-y-3">
-            <h2 className="text-xl font-medium text-foreground">Screenshots</h2>
+        <ShellWrapper wide>
+          <div className="space-y-3 px-2 pb-10">
+            <h2 className="text-2xl font-medium tracking-tight text-foreground">Screenshots</h2>
             <ScreenshotLightbox screenshots={validScreenshots} projectTitle={project.title} />
           </div>
         </ShellWrapper>
       )}
 
-      <HatchDivider />
-      {/* Content — same pattern as blog article ShellWrapper */}
-      <ShellWrapper>
-        <article className="p-2 space-y-8">
+      <ShellWrapper wide>
+        <article className="space-y-8 px-2 pb-16">
           {/* About */}
           <section>
-            <h2 className="text-xl font-medium text-foreground mb-3">About this project</h2>
-            <ul className="space-y-2 text-base leading-relaxed text-muted-foreground text-justify">
+            <h2 className="mb-3 text-2xl font-medium tracking-tight text-foreground">
+              About this project
+            </h2>
+            <ul className="space-y-2 text-[15px] leading-relaxed text-muted-foreground">
               {project.description.map((line) => (
                 <li key={line} className="flex gap-1">
-                  <DotIcon className="shrink-0 mt-0.5" />
+                  <DotIcon className="mt-0.5 shrink-0" />
                   <span>{line}</span>
                 </li>
               ))}
@@ -265,7 +250,9 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
           </section>
           {project.techStack && project.techStack.length > 0 && (
             <section>
-              <h2 className="text-xl font-medium text-foreground mb-3">Tech Stack</h2>
+              <h2 className="mb-3 text-2xl font-medium tracking-tight text-foreground">
+                Tech stack
+              </h2>
               <div className="flex flex-wrap gap-2">
                 {project.techStack.map((tech) => (
                   <StackBadge
@@ -280,11 +267,11 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
           )}
 
           {/* Back links */}
-          <div className="flex flex-wrap gap-2">
-            <Button asChild variant="outline" size="sm" className="rounded-full">
+          <div className="flex flex-wrap gap-2 border-t pt-6">
+            <Button asChild variant="outline" size="sm" className="rounded-md">
               <Link href="/projects">← All projects</Link>
             </Button>
-            <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Button asChild variant="outline" size="sm" className="rounded-md">
               <Link href="/">Back to portfolio</Link>
             </Button>
           </div>
