@@ -125,6 +125,17 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
+        {/*
+          Must run before first paint. `scroll-behavior: smooth` also applies to the browser's
+          own scroll restoration on reload, so refreshing part-way down the page makes it paint
+          high and visibly animate down to the saved offset. An inline style beats the
+          stylesheet; RouteScrollRestoration removes it once restoration has settled.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.style.scrollBehavior='auto'",
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}

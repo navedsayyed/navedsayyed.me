@@ -95,6 +95,11 @@
     @apply bg-background text-foreground;
   }
 
+  /*
+   * Smooth scrolling is suppressed during page load by an inline style set in layout.tsx,
+   * because `scroll-behavior: smooth` also animates the browser's own scroll restoration
+   * on reload. RouteScrollRestoration clears that inline style once restoration settles.
+   */
   html {
     scroll-behavior: smooth;
   }

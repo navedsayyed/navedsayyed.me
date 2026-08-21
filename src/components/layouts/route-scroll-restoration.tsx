@@ -113,6 +113,37 @@ const RouteScrollRestoration = () => {
   const lastBlogScrollYRef = useRef(0);
   const lastHomeScrollYRef = useRef(0);
 
+  /*
+   * layout.tsx pins scroll-behavior to auto inline before first paint, so the browser's own
+   * scroll restoration on reload lands instantly instead of animating down from the top.
+   * Release it two frames after load, once restoration has settled, so anchor links and
+   * in-app navigation keep their smooth scrolling.
+   */
+  useEffect(() => {
+    let outerFrame = 0;
+    let innerFrame = 0;
+
+    const releaseSmoothScroll = () => {
+      outerFrame = window.requestAnimationFrame(() => {
+        innerFrame = window.requestAnimationFrame(() => {
+          document.documentElement.style.removeProperty("scroll-behavior");
+        });
+      });
+    };
+
+    if (document.readyState === "complete") {
+      releaseSmoothScroll();
+    } else {
+      window.addEventListener("load", releaseSmoothScroll, { once: true });
+    }
+
+    return () => {
+      window.cancelAnimationFrame(outerFrame);
+      window.cancelAnimationFrame(innerFrame);
+      window.removeEventListener("load", releaseSmoothScroll);
+    };
+  }, []);
+
   useLayoutEffect(() => {
     const previousPathname = previousPathnameRef.current;
     previousPathnameRef.current = pathname;

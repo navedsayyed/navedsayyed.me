@@ -18,7 +18,7 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <PageShellWrapper>
+    <PageShellWrapper bare>
       <section className="relative flex h-screen w-full items-center justify-center px-8 py-16 md:px-0">
         <div className="relative flex max-w-xl flex-col items-left space-y-6">
           <ShellWrapper>
@@ -28,13 +28,10 @@ export default function ErrorPage({
           </ShellWrapper>
 
           <header className="space-y-3">
-            <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
-              Something went wrong
-            </p>
-            <h1 className="text-3xl font-medium tracking-tight text-foreground md:text-4xl">
+            <h1 className="text-3xl font-medium tracking-tight text-foreground">
               An unexpected error occurred
             </h1>
-            <p className="text-base leading-relaxed text-muted-foreground">
+            <p className="text-[15px] leading-relaxed text-muted-foreground">
               Don&apos;t worry, these things happen. Try again or head back home to continue
               exploring.
             </p>

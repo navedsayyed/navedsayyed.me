@@ -2,9 +2,8 @@ import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import PageShellWrapper, { HatchDivider } from "@/components/layouts/page-shell";
+import PageShellWrapper from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
-import StackBadge from "@/components/ui/extended/stack-badge";
 import { DeveloperDetails } from "@/dev-constants/details";
 import { ProjectsData } from "@/dev-constants/projects";
 import { getProjectSlug } from "@/lib/project-utils";
@@ -93,62 +92,62 @@ const ProjectsPage = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
       />
-      <PageShellWrapper contentClassName="flex flex-col">
-        <ShellWrapper>
-          <header className="space-y-2 p-4">
-            <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground">My Work</p>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-              Projects
-            </h1>
-            <p className="text-base leading-relaxed text-muted-foreground">{description}</p>
+      <PageShellWrapper bare contentClassName="flex flex-col">
+        <ShellWrapper wide>
+          <header className="space-y-2 px-2 pt-12 pb-8">
+            <h1 className="text-3xl font-medium tracking-tight text-foreground">Projects</h1>
+            <p className="max-w-[68ch] text-[15px] leading-relaxed text-muted-foreground">
+              {description}
+            </p>
           </header>
         </ShellWrapper>
 
-        <HatchDivider />
-
-        <ShellWrapper>
-          <div className="space-y-3 p-2">
+        <ShellWrapper wide>
+          <div className="px-2 pb-16">
             {ProjectsData.map((project) => (
               <Link
                 key={project.title}
                 href={`/projects/${getProjectSlug(project)}`}
-                className="group block rounded-md border p-4 transition-colors hover:bg-muted/50"
+                className="group flex items-start justify-between gap-4 border-t py-5 transition-colors first:border-t-0 first:pt-0 hover:bg-muted/30"
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex gap-3">
-                    <div className="flex aspect-square h-10 shrink-0 items-center justify-center rounded border bg-muted">
-                      <Image
-                        src={project.icon}
-                        alt={`${project.title} project icon`}
-                        width={32}
-                        height={32}
-                        sizes="32px"
-                        className="h-8 w-8 rounded object-cover"
-                      />
+                <div className="flex min-w-0 flex-1 gap-3.5">
+                  <div className="mt-0.5 flex aspect-square h-11 shrink-0 items-center justify-center rounded-lg border bg-muted">
+                    <Image
+                      src={project.icon}
+                      alt={`${project.title} project icon`}
+                      width={36}
+                      height={36}
+                      sizes="36px"
+                      className="h-9 w-9 rounded object-cover"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1 space-y-1">
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                      <h2 className="text-[15px] font-medium text-foreground group-hover:underline">
+                        {project.title}
+                      </h2>
+                      {project.date && (
+                        <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">
+                          {new Date(project.date).getFullYear()}
+                        </span>
+                      )}
                     </div>
-                    <div className="space-y-2">
-                      <div className="space-y-0.5">
-                        <h2 className="text-base font-medium text-foreground group-hover:underline">
-                          {project.title}
-                        </h2>
-                        <p className="text-sm text-muted-foreground">{project.tagline}</p>
-                      </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        {project.techStack.slice(0, 5).map((tech) => (
-                          <StackBadge
-                            key={tech.name}
-                            name={tech.name}
-                            icon={tech.icon}
-                            hasDarkIcon={tech.hasDarkIcon}
-                          />
-                        ))}
-                      </div>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      {project.tagline}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {project.techStack.slice(0, 5).map((tech) => (
+                        <span
+                          key={tech.name}
+                          className="rounded border px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
+                        >
+                          {tech.name}
+                        </span>
+                      ))}
                     </div>
                   </div>
-                  <span className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground">
-                    <ArrowUpRight className="size-4" />
-                  </span>
                 </div>
+                <ArrowUpRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
               </Link>
             ))}
           </div>

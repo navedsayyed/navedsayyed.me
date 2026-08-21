@@ -37,26 +37,6 @@ const ExpandableSectionHeader = React.forwardRef<HTMLElement, ExpandableSectionH
 );
 ExpandableSectionHeader.displayName = "ExpandableSectionHeader";
 
-// Label component
-interface ExpandableSectionLabelProps extends React.HTMLAttributes<HTMLParagraphElement> {
-  children: React.ReactNode;
-}
-
-const ExpandableSectionLabel = React.forwardRef<HTMLParagraphElement, ExpandableSectionLabelProps>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <p
-        ref={ref}
-        className={cn("text-sm uppercase tracking-[0.2em] text-muted-foreground", className)}
-        {...props}
-      >
-        {children}
-      </p>
-    );
-  }
-);
-ExpandableSectionLabel.displayName = "ExpandableSectionLabel";
-
 // Title component
 interface ExpandableSectionTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
@@ -256,7 +236,6 @@ export {
   ExpandableSectionDescription,
   ExpandableSectionHeader,
   ExpandableSectionItem,
-  ExpandableSectionLabel,
   ExpandableSectionList,
   ExpandableSectionTitle,
   ExpandableSectionTrigger,
