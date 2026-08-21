@@ -8,6 +8,10 @@ import { Button } from "@/components/ui/button";
 import { GitHubButtons } from "@/components/ui/extended/github-buttons";
 import ThemeSwitcher from "@/components/ui/extended/theme-switcher";
 
+/** Opacity of the scrolled pill's outline. The header is chrome — the border should let you
+ *  find its edge, not pull attention off the content. Raise toward 0.3 for a harder edge. */
+const PILL_RING_ALPHA = 0.14;
+
 const SiteHeader = () => {
   const { scrollY } = useScroll();
   const pathname = usePathname();
@@ -19,25 +23,30 @@ const SiteHeader = () => {
 
   // Container shape
   const borderRadius = useTransform(progress, [0, 1], [0, 9999]);
-  const maxWidth = useTransform(progress, [0, 1], [672, 360]);
+  // 768 matches the homepage column (max-w-3xl) so the nav aligns with the content edge.
+  const maxWidth = useTransform(progress, [0, 1], [768, 360]);
 
   // Floating offset
   const marginTop = useTransform(progress, [0, 1], [0, 10]);
 
-  // Side shrink (for small screens where maxWidth doesn't help)
-  const sideMargin = useTransform(progress, [0, 1], [0, 16]);
+  // Side inset is a static padding rather than a scroll-driven one: animating padding on a
+  // full-width container relayouts it every frame, and maxWidth already carries the morph.
 
   // Shadow
-  const shadowAlpha = useTransform(progress, [0, 1], [0, 0.12]);
-  const boxShadow = useMotionTemplate`0 8px 32px rgba(0, 0, 0, ${shadowAlpha})`;
+  // A black shadow is near-invisible on the dark ground, so it carries the float in light
+  // mode and the border does more of the work in dark. 0.3 keeps both readable.
+  const shadowAlpha = useTransform(progress, [0, 1], [0, 0.3]);
+  const boxShadow = useMotionTemplate`0 6px 24px rgba(0, 0, 0, ${shadowAlpha})`;
 
-  // Border opacity (pill border fades in)
-  const borderAlpha = useTransform(progress, [0, 1], [0, 0.15]);
-  const borderColor = useMotionTemplate`rgba(128, 128, 128, ${borderAlpha})`;
+  // Pill outline fades in. --pill-ring-rgb is warm-tinted to match the ground, so the line
+  // reads as part of the palette instead of a cold white halo.
+  const borderAlpha = useTransform(progress, [0, 1], [0, PILL_RING_ALPHA]);
+  const borderColor = useMotionTemplate`rgb(var(--pill-ring-rgb) / ${borderAlpha})`;
 
-  // Bottom border (fades out as pill forms)
-  const bottomBorderAlpha = useTransform(progress, [0, 1], [0.15, 0]);
-  const bottomBorderColor = useMotionTemplate`rgba(128, 128, 128, ${bottomBorderAlpha})`;
+  // Bottom edge: a full-width divider at rest, converging on the pill's own alpha once the
+  // pill forms. It used to animate to 0, which left the scrolled pill bordered on three sides.
+  const bottomBorderAlpha = useTransform(progress, [0, 1], [0.1, PILL_RING_ALPHA]);
+  const bottomBorderColor = useMotionTemplate`rgb(var(--pill-ring-rgb) / ${bottomBorderAlpha})`;
 
   // Arrow icon fade-out
   const arrowOpacity = useTransform(progress, [0, 0.5], [1, 0]);
@@ -45,10 +54,7 @@ const SiteHeader = () => {
 
   return (
     <div className="sticky top-0 z-50">
-      <motion.div
-        className="flex justify-center"
-        style={{ y: marginTop, paddingLeft: sideMargin, paddingRight: sideMargin }}
-      >
+      <motion.div className="flex justify-center px-4" style={{ y: marginTop }}>
         <motion.header
           className="flex items-center justify-between gap-3 bg-background/95 mx-auto w-full px-4 h-14"
           style={{
@@ -59,6 +65,7 @@ const SiteHeader = () => {
             borderStyle: "solid",
             borderColor,
             borderBottomColor: bottomBorderColor,
+            willChange: "max-width, transform",
           }}
         >
           {/* Back + Logo */}

@@ -34,6 +34,13 @@ export const mdxOptions = {
 };
 
 /**
+ * Drafts and templates are prefixed with "_" and are never routed in production.
+ * They stay reachable in `next dev` so posts can be previewed before publishing.
+ */
+const isDraftFile = (name: string) => name.startsWith("_");
+const allowDrafts = () => process.env.NODE_ENV === "development";
+
+/**
  * Get all blog post slugs
  */
 export function getAllBlogSlugs(): string[] {
@@ -42,7 +49,10 @@ export function getAllBlogSlugs(): string[] {
   }
 
   const files = fs.readdirSync(contentDirectory);
-  return files.filter((file) => file.endsWith(".mdx")).map((file) => file.replace(/\.mdx$/, ""));
+  return files
+    .filter((file) => file.endsWith(".mdx"))
+    .filter((file) => allowDrafts() || !isDraftFile(file))
+    .map((file) => file.replace(/\.mdx$/, ""));
 }
 
 /**
@@ -58,6 +68,12 @@ export function getBlogPostBySlug(slug: string): BlogPost | null {
 
     const fileContents = fs.readFileSync(filePath, "utf8");
     const { data, content } = matter(fileContents);
+
+    // `published: false` and "_"-prefixed drafts must 404 in production, so an
+    // unfinished post can never be crawled or indexed via its direct URL.
+    if (!allowDrafts() && (data.published === false || isDraftFile(slug))) {
+      return null;
+    }
 
     const readingTimeResult = readingTime(content);
 

@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { DeveloperDetails } from "@/dev-constants/details";
+import { ProjectsData } from "@/dev-constants/projects";
 import { getAllBlogPosts } from "@/lib/markdown";
+import { getProjectSlug } from "@/lib/project-utils";
 
 const normalizeSiteUrl = (url: string) => {
   return url.replace(/\/$/, "");
@@ -11,18 +13,43 @@ const SITE_LAUNCH_DATE = "2024-01-01";
 export const generateSitemap = (): MetadataRoute.Sitemap => {
   const siteUrl = normalizeSiteUrl(DeveloperDetails.portfolio);
 
-  const staticRoutes = ["/", "/blog"];
   const posts = getAllBlogPosts();
 
   const mostRecentPostDate = posts[0]?.frontmatter.date
     ? new Date(posts[0].frontmatter.date)
     : new Date(SITE_LAUNCH_DATE);
 
-  const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
-    url: `${siteUrl}${route}`,
-    lastModified: route === "/blog" ? mostRecentPostDate : new Date(),
-    changeFrequency: route === "/" ? "weekly" : "monthly",
-    priority: route === "/" ? 1.0 : 0.8,
+  const mostRecentProjectDate = ProjectsData.map((project) => project.date)
+    .filter((date): date is string => Boolean(date))
+    .sort()
+    .reverse()[0];
+
+  const staticEntries: MetadataRoute.Sitemap = [
+    {
+      url: `${siteUrl}/`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 1.0,
+    },
+    {
+      url: `${siteUrl}/projects`,
+      lastModified: mostRecentProjectDate ? new Date(mostRecentProjectDate) : new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/blog`,
+      lastModified: mostRecentPostDate,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+  ];
+
+  const projectEntries: MetadataRoute.Sitemap = ProjectsData.map((project) => ({
+    url: `${siteUrl}/projects/${getProjectSlug(project)}`,
+    lastModified: project.date ? new Date(project.date) : undefined,
+    changeFrequency: "monthly",
+    priority: 0.8,
   }));
 
   const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
@@ -32,7 +59,7 @@ export const generateSitemap = (): MetadataRoute.Sitemap => {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...postEntries];
+  return [...staticEntries, ...projectEntries, ...postEntries];
 };
 
 export const generateRobots = (): MetadataRoute.Robots => {
@@ -76,7 +103,7 @@ export const blogMetadata = () => {
       "React Tutorials",
       "Next.js Tips",
       "TypeScript Guide",
-      "Developer Blog Nepal",
+      "Developer Blog India",
       "Programming Articles",
     ],
     openGraph: {

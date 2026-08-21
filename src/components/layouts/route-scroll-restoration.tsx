@@ -152,22 +152,43 @@ const RouteScrollRestoration = () => {
   useEffect(() => {
     if (pathname !== HOME_PATH && pathname !== BLOG_PATH) return;
 
-    const save = () => {
+    /*
+     * Scroll fires up to ~120x/second. Only the ref write is cheap enough to run there.
+     * history.replaceState plus two synchronous sessionStorage writes per event — which is
+     * what saveHomeScrollPosition does — saturates the main thread and visibly stutters the
+     * page, so persistence is debounced to when scrolling settles and flushed on pagehide.
+     */
+    const trackScrollY = () => {
       if (pathname === HOME_PATH) {
         lastHomeScrollYRef.current = window.scrollY;
-        saveHomeScrollPosition();
         return;
       }
 
       lastBlogScrollYRef.current = window.scrollY;
     };
 
-    save();
-    window.addEventListener("scroll", save, { passive: true });
+    const persist = () => {
+      trackScrollY();
+      if (pathname === HOME_PATH) saveHomeScrollPosition();
+    };
+
+    let idleTimer = 0;
+
+    const handleScroll = () => {
+      trackScrollY();
+      window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(persist, 150);
+    };
+
+    persist();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("pagehide", persist);
 
     return () => {
-      save();
-      window.removeEventListener("scroll", save);
+      window.clearTimeout(idleTimer);
+      persist();
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("pagehide", persist);
     };
   }, [pathname]);
 

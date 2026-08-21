@@ -13,7 +13,6 @@ import {
   ExpandableSection,
   ExpandableSectionDescription,
   ExpandableSectionHeader,
-  ExpandableSectionLabel,
   ExpandableSectionList,
   ExpandableSectionTitle,
 } from "@/components/ui/extended/expandable-section";
@@ -23,19 +22,20 @@ import type { BlogPost } from "@/lib/markdown/mdx";
 interface BlogsGridProps {
   posts: BlogPost[];
   maxPosts?: number;
+  /** Homepage uses the roomier column; the /blog index keeps the narrower reading width. */
+  wide?: boolean;
 }
 
-export const BlogsGrid = ({ posts, maxPosts }: BlogsGridProps) => {
+export const BlogsGrid = ({ posts, maxPosts, wide = false }: BlogsGridProps) => {
   const displayPosts = maxPosts ? posts.slice(0, maxPosts) : posts;
 
   return (
-    <ShellWrapper>
-      <ExpandableSection>
-        <ExpandableSectionHeader>
-          <ExpandableSectionLabel>My Writings</ExpandableSectionLabel>
-          <ExpandableSectionTitle>Blog & Tutorials</ExpandableSectionTitle>
+    <ShellWrapper wide={wide}>
+      <ExpandableSection className="px-2 py-10">
+        <ExpandableSectionHeader className="mb-6 space-y-1">
+          <ExpandableSectionTitle>Writing</ExpandableSectionTitle>
           <ExpandableSectionDescription>
-            Technical articles, guides, and insights from my development journey.
+            Notes and guides from things I've built.
           </ExpandableSectionDescription>
         </ExpandableSectionHeader>
 

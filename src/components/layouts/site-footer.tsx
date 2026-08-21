@@ -5,9 +5,9 @@ import { DeveloperDetails } from "@/dev-constants/details";
 const SiteFooter = () => {
   return (
     <footer className="w-full">
-      <div className="flex h-24 px-8 md:px-0 max-w-2xl mx-auto items-center justify-between">
-        <div className="flex flex-col items-center justify-center w-full space-y-1">
-          <p className="font-medium text-lg text-center">Naveddddd</p>
+      <div className="mx-auto flex h-24 max-w-3xl items-center justify-between px-8 md:px-0">
+        <div className="flex w-full flex-col items-center justify-center space-y-1">
+          <p className="text-center text-lg font-medium">Naveddddd</p>
           <p className="text-sm text-muted-foreground text-center">
             Built by{" "}
             <Link

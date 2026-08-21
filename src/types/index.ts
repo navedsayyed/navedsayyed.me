@@ -68,3 +68,15 @@ export interface Experience {
   skills: Array<TechStack>;
   isCurrent: boolean;
 }
+
+/** A stack entry. `icon` is optional — not every tool has a logo in /public/tech-icon. */
+export interface StackItem {
+  name: string;
+  icon?: string;
+  hasDarkIcon?: boolean;
+}
+
+export interface StackGroup {
+  label: string;
+  items: Array<StackItem>;
+}

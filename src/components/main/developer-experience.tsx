@@ -10,7 +10,6 @@ import {
   ExpandableSectionDescription,
   ExpandableSectionHeader,
   ExpandableSectionItem,
-  ExpandableSectionLabel,
   ExpandableSectionList,
   ExpandableSectionTitle,
   ExpandableSectionTrigger,
@@ -20,65 +19,74 @@ import { ExperienceData } from "@/dev-constants/experience";
 
 const DeveloperExperience = () => {
   return (
-    <ShellWrapper>
-      <ExpandableSection>
-        <ExpandableSectionHeader>
-          <ExpandableSectionLabel>My Journey</ExpandableSectionLabel>
-          <ExpandableSectionTitle>Professional Experience</ExpandableSectionTitle>
+    <ShellWrapper wide>
+      <ExpandableSection className="px-2 py-10">
+        <ExpandableSectionHeader className="mb-6 space-y-1">
+          <ExpandableSectionTitle>Experience</ExpandableSectionTitle>
           <ExpandableSectionDescription>
-            A timeline of my career path, showcasing the roles and technologies I&apos;ve worked
-            with in various projects and companies.
+            Roles and teams I&apos;ve shipped with.
           </ExpandableSectionDescription>
         </ExpandableSectionHeader>
 
-        <ExpandableSectionList>
+        <ExpandableSectionList className="space-y-0">
           {ExperienceData.map((experience, index) => (
-            <ExpandableSectionItem key={experience.company} className="relative">
-              {/* Connecting line - spans full item height */}
+            <ExpandableSectionItem
+              key={experience.company}
+              className="relative border-t py-5 first:border-t-0 first:pt-0"
+            >
+              {/* Connecting line — runs from under the logo to the next item */}
               {index < ExperienceData.length - 1 && (
-                <div className="absolute left-[20px] top-[44px] bottom-[-16px] w-px bg-muted-foreground/30" />
+                <div className="absolute left-[22px] top-[68px] bottom-[-8px] w-px bg-border" />
               )}
-              <ExpandableSectionTrigger>
-                <div className="flex space-x-2">
-                  <div className="aspect-square bg-muted h-10 flex items-center justify-center border rounded mt-1 relative z-10">
+              <ExpandableSectionTrigger className="items-start">
+                <div className="flex min-w-0 flex-1 gap-3.5">
+                  <div className="relative z-10 mt-0.5 flex aspect-square h-11 shrink-0 items-center justify-center rounded-lg border bg-muted">
                     <Image
                       src={experience.logo}
                       alt={`${experience.company} company logo`}
-                      width={32}
-                      height={32}
-                      sizes="32px"
-                      className="h-8 w-8 rounded object-cover"
+                      width={36}
+                      height={36}
+                      sizes="36px"
+                      className="h-9 w-9 rounded object-cover"
                       title={experience.company}
                     />
                   </div>
-                  <div className="space-y-1 pl-3">
-                    <div className="flex space-x-1 items-center">
-                      <h3 className="text-lg font-medium text-foreground md:text-xl">
-                        {experience.company}
-                      </h3>
-                      {experience.isCurrent && (
-                        <div className="relative flex h-3 w-3 items-center justify-center">
-                          <motion.span
-                            className="absolute h-full w-full rounded-full bg-emerald-400"
-                            animate={{
-                              scale: [1, 1.8, 1.8],
-                              opacity: [0.7, 0, 0],
-                            }}
-                            transition={{
-                              duration: 1.5,
-                              repeat: Number.POSITIVE_INFINITY,
-                              ease: "easeOut",
-                            }}
-                          />
-                          <span className="relative h-2 w-2 rounded-full bg-emerald-500" />
-                        </div>
-                      )}
+                  {/*
+                    The date belongs to the title row only. Keeping it as a sibling of the
+                    whole text column made every line below it share the narrowed width,
+                    which shredded long company names on mobile. flex-wrap lets it drop to
+                    its own line when there genuinely isn't room.
+                  */}
+                  <div className="min-w-0 flex-1 space-y-1">
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                      <div className="flex items-center gap-1.5">
+                        <h3 className="text-[15px] font-medium text-foreground">
+                          {experience.company}
+                        </h3>
+                        {experience.isCurrent && (
+                          <div className="relative flex h-3 w-3 items-center justify-center">
+                            <motion.span
+                              className="absolute h-full w-full rounded-full bg-emerald-400"
+                              animate={{
+                                scale: [1, 1.8, 1.8],
+                                opacity: [0.7, 0, 0],
+                              }}
+                              transition={{
+                                duration: 1.5,
+                                repeat: Number.POSITIVE_INFINITY,
+                                ease: "easeOut",
+                              }}
+                            />
+                            <span className="relative h-2 w-2 rounded-full bg-emerald-500" />
+                          </div>
+                        )}
+                      </div>
+                      <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">
+                        {experience.startDate} — {experience.endDate}
+                      </span>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {experience.designation} • {experience.type}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {experience.startDate} - {experience.endDate}
+                      {experience.designation} · {experience.type}
                     </p>
                   </div>
                 </div>

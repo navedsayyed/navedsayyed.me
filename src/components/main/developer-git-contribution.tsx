@@ -16,7 +16,6 @@ import {
   ExpandableSection,
   ExpandableSectionDescription,
   ExpandableSectionHeader,
-  ExpandableSectionLabel,
   ExpandableSectionList,
   ExpandableSectionTitle,
 } from "@/components/ui/extended/expandable-section";
@@ -81,26 +80,25 @@ const DeveloperGitContribution = () => {
 
   if (isLoading) {
     return (
-      <ShellWrapper>
-        <div className="bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)] border bg-muted h-[11.9rem]" />
+      <ShellWrapper wide>
+        <div className="px-2 py-10">
+          <div className="h-[11.9rem] animate-pulse rounded-lg border bg-muted/40" />
+        </div>
       </ShellWrapper>
     );
   }
 
-  if (error || activities.length === 0) {
-    return (
-      <div className="bg-[repeating-linear-gradient(-45deg,var(--color-destructive),var(--color-destructive)_1px,transparent_1px,transparent_6px)] border border-destructive bg-muted h-12 " />
-    );
-  }
+  // Nothing to show beats a broken-looking placeholder — the graph is supporting detail,
+  // not something the page depends on.
+  if (error || activities.length === 0) return null;
 
   return (
-    <ShellWrapper>
-      <ExpandableSection>
-        <ExpandableSectionHeader>
-          <ExpandableSectionLabel>My Activity</ExpandableSectionLabel>
-          <ExpandableSectionTitle>GitHub Contributions</ExpandableSectionTitle>
+    <ShellWrapper wide>
+      <ExpandableSection className="px-2 py-10">
+        <ExpandableSectionHeader className="mb-6 space-y-1">
+          <ExpandableSectionTitle>Contributions</ExpandableSectionTitle>
           <ExpandableSectionDescription>
-            A visual snapshot of my coding activity and consistency over the past year.
+            A year of commits, at a glance.
           </ExpandableSectionDescription>
         </ExpandableSectionHeader>
 

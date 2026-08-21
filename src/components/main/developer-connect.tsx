@@ -1,6 +1,5 @@
 import { ArrowUpRight, FileText, Mail } from "lucide-react";
 import Link from "next/link";
-import { HatchDivider } from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
 import { Button } from "@/components/ui/button";
 import ThemedIcon from "@/components/ui/extended/themed-icon";
@@ -10,17 +9,12 @@ const DeveloperConnect = () => {
   const SocialLinks = DeveloperDetails.socialLinks;
   return (
     <>
-      <ShellWrapper>
-        <div className="space-y-3 p-2">
-          <header className="space-y-2">
-            <div className="space-y-1">
-              <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Connect</p>
-              <h2 className="mt-1 text-3xl font-medium tracking-tight text-foreground md:text-4xl">
-                Let&apos;s build together
-              </h2>
-            </div>
-            <p className="text-base leading-relaxed text-justify text-muted-foreground">
-              Pick the channel that fits best every link here stays in sync with my latest work.
+      <ShellWrapper wide>
+        <div className="px-2 py-10">
+          <header className="mb-6 space-y-1">
+            <h2 className="text-2xl font-medium tracking-tight text-foreground">Connect</h2>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Every link here stays in sync with my latest work.
             </p>
           </header>
 
@@ -56,26 +50,25 @@ const DeveloperConnect = () => {
           </div>
         </div>
       </ShellWrapper>
-      <HatchDivider />
-      <ShellWrapper>
-        <div className="space-y-4 overflow-hidden border p-4 bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_6px)]">
+      <ShellWrapper wide>
+        <div className="mb-14 space-y-4 rounded-lg border bg-muted/30 p-5">
           <div className="space-y-1">
-            <h2 className="text-2xl font-medium text-foreground">Prefer a direct line?</h2>
-            <p className="text-sm text-muted-foreground">
-              Email lands straight in my inbox and my resume is updated with every new engagement.
+            <h2 className="text-lg font-medium text-foreground">Prefer a direct line?</h2>
+            <p className="max-w-[60ch] text-sm leading-relaxed text-muted-foreground">
+              Email lands straight in my inbox, and my resume is kept current.
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {DeveloperDetails.email && (
-              <Button asChild>
+              <Button asChild size="sm" className="rounded-md">
                 <Link href={`mailto:${DeveloperDetails.email}`}>
                   <Mail className="size-4" />
-                  Email Me
+                  Email
                 </Link>
               </Button>
             )}
             {DeveloperDetails.resume && (
-              <Button variant="outline" asChild>
+              <Button variant="outline" asChild size="sm" className="rounded-md">
                 <Link href={DeveloperDetails.resume} target="_blank" rel="noreferrer noopener">
                   <FileText className="size-4" />
                   Resume
