@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { PortfolioChatbot } from "@/components/chatbot";
 import RouteScrollRestoration from "@/components/layouts/route-scroll-restoration";
@@ -106,9 +106,15 @@ export const viewport: Viewport = {
   ],
 };
 
-const font = Space_Grotesk({
+const sans = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
+});
+
+// Metadata face — dates, ranges, keyboard hints. Tabular figures keep columns aligned.
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
 });
 
 export default function RootLayout({
@@ -128,7 +134,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className={font.className} suppressHydrationWarning>
+      <body
+        className={`${sans.variable} ${mono.variable} ${sans.className}`}
+        suppressHydrationWarning
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

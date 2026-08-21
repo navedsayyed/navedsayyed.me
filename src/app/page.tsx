@@ -1,5 +1,5 @@
 import { BlogsGrid } from "@/components/blog/blogs-grid";
-import PageShellWrapper, { HatchDivider } from "@/components/layouts/page-shell";
+import PageShellWrapper from "@/components/layouts/page-shell";
 import DeveloperConnect from "@/components/main/developer-connect";
 import DeveloperEducation from "@/components/main/developer-education";
 import DeveloperExperience from "@/components/main/developer-experience";
@@ -77,21 +77,18 @@ const Page = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(projectsJsonLd) }}
       />
-      <PageShellWrapper contentClassName="flex flex-col">
+      {/*
+        Sections are separated by their own hairline rules and vertical rhythm now.
+        A HatchDivider between every one made the frame louder than the content.
+      */}
+      <PageShellWrapper bare contentClassName="flex flex-col">
         <DeveloperIntro />
-        <HatchDivider />
         <DeveloperProjects />
-        <HatchDivider />
         <DeveloperExperience />
-        <HatchDivider />
         <DeveloperEducation />
-        <HatchDivider />
         <DeveloperGitContribution />
-        <HatchDivider />
         <DeveloperStack />
-        <HatchDivider />
-        <BlogsGrid maxPosts={4} posts={recentPosts} />
-        <HatchDivider />
+        <BlogsGrid maxPosts={4} posts={recentPosts} wide />
         <DeveloperConnect />
       </PageShellWrapper>
     </>

@@ -67,7 +67,7 @@ const ExpandableSectionTitle = React.forwardRef<HTMLHeadingElement, ExpandableSe
     return (
       <h2
         ref={ref}
-        className={cn("text-3xl font-medium tracking-tight text-foreground md:text-4xl", className)}
+        className={cn("text-2xl font-medium tracking-tight text-foreground", className)}
         {...props}
       >
         {children}
@@ -89,7 +89,7 @@ const ExpandableSectionDescription = React.forwardRef<
   return (
     <p
       ref={ref}
-      className={cn("text-base leading-relaxed text-muted-foreground", className)}
+      className={cn("text-sm leading-relaxed text-muted-foreground", className)}
       {...props}
     >
       {children}
