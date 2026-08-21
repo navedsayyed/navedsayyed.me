@@ -1,53 +1,81 @@
 import { FileText, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import ProfilePhotoModal from "@/components/ui/extended/profile-photo-modal";
 import { DeveloperDetails } from "@/dev-constants/details";
 import ShellWrapper from "../layouts/shell-wrapper";
+
+/** Keyboard hint pill — mirrors the shortcuts wired up in the site header. */
+const Kbd = ({ children }: { children: React.ReactNode }) => (
+  <kbd className="ml-1 rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px] leading-none text-muted-foreground">
+    {children}
+  </kbd>
+);
 
 const DeveloperIntro = () => {
   const { name, designation, bio, avatar, email, resume } = DeveloperDetails;
 
   return (
-    <ShellWrapper>
-      <div className="relative p-2">
-        <div className="flex flex-col md:flex-row md:justify-between md:space-x-3 space-y-3 md:space-y-0 ">
-          <Image
+    <ShellWrapper wide>
+      <div className="px-2 pt-12 pb-14">
+        <div className="flex flex-col gap-5 md:flex-row md:items-start md:gap-6">
+          <ProfilePhotoModal
             src={avatar}
             alt={`Profile photo of ${name}, ${designation}`}
-            width={128}
-            height={128}
-            priority
-            sizes="128px"
-            className="h-28 w-28 md:h-32 md:w-32 md:mt-2.5 shrink-0 rounded border object-cover shadow-md"
-            title={`Avatar of ${name}`}
-          />
-          <div className="space-y-2">
-            <div className="space-y-1">
-              <h1 className="mt-1 text-3xl font-medium tracking-tight text-foreground md:text-4xl">
-                {name}
-              </h1>
-              <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
-                {designation}
-              </p>
-            </div>
-            <p className="text-base leading-relaxed text-justify text-muted-foreground">{bio}</p>
-            <div className="flex flex-wrap gap-2 pt-1">
+            name={name}
+            designation={designation}
+            email={email}
+            resume={resume}
+          >
+            {/*
+              md:mt-2 pulls the photo down onto the name's cap height. Flex `items-start`
+              aligns it to the h1's box top, which sits above the glyphs by the line's
+              half-leading — without this nudge the photo reads as floating high.
+            */}
+            <Image
+              src={avatar}
+              alt={`Profile photo of ${name}, ${designation}`}
+              width={144}
+              height={144}
+              priority
+              sizes="(min-width: 768px) 144px, 112px"
+              className="h-28 w-28 shrink-0 rounded-xl border object-cover md:mt-2 md:h-36 md:w-36"
+              title={`Avatar of ${name}`}
+            />
+          </ProfilePhotoModal>
+
+          <div className="min-w-0 flex-1">
+            <h1 className="text-[2rem] font-medium leading-[1.15] tracking-tight text-foreground md:text-[2.375rem]">
+              {name}
+            </h1>
+            <p className="mt-1.5 text-[15px] text-muted-foreground">{designation}</p>
+
+            <p className="mt-4 max-w-[64ch] text-[15px] leading-[1.7] text-muted-foreground">
+              {bio}
+            </p>
+
+            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
               {email && (
-                <Button asChild size="sm">
-                  <Link href={`mailto:${email}`}>
-                    <Mail className="size-4" />
-                    Email Me
-                  </Link>
-                </Button>
+                <Link
+                  href={`mailto:${email}`}
+                  className="inline-flex items-center gap-2 text-sm text-foreground transition-colors hover:text-muted-foreground"
+                >
+                  <Mail className="size-4 text-muted-foreground" />
+                  Email
+                  <Kbd>E</Kbd>
+                </Link>
               )}
               {resume && (
-                <Button asChild size="sm" variant="outline">
-                  <Link href={resume} target="_blank" rel="noreferrer noopener">
-                    <FileText className="size-4" />
-                    Resume
-                  </Link>
-                </Button>
+                <Link
+                  href={resume}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center gap-2 text-sm text-foreground transition-colors hover:text-muted-foreground"
+                >
+                  <FileText className="size-4 text-muted-foreground" />
+                  Resume
+                  <Kbd>R</Kbd>
+                </Link>
               )}
             </div>
           </div>

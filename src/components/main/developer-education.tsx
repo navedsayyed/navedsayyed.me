@@ -7,56 +7,58 @@ const DeveloperEducation = () => {
   const educationData = DeveloperDetails.education;
 
   return (
-    <ShellWrapper>
-      <div className="space-y-3 p-2">
-        <header className="space-y-2">
-          <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Education</p>
-          <h2 className="text-3xl font-medium tracking-tight text-foreground md:text-4xl">
-            Academic Background
-          </h2>
-          <p className="text-base leading-relaxed text-muted-foreground">
-            My educational journey that shaped my foundation in technology and problem-solving.
+    <ShellWrapper wide>
+      <div className="px-2 py-10">
+        <header className="mb-6 space-y-1">
+          <h2 className="text-2xl font-medium tracking-tight text-foreground">Education</h2>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Where I studied, and what I studied there.
           </p>
         </header>
 
-        <div className="flex flex-col space-y-3">
+        <div className="flex flex-col">
           {educationData.map((education, index) => (
-            <div key={education.institution} className="relative flex items-start justify-between">
+            <div
+              key={education.institution}
+              className="relative border-t py-5 first:border-t-0 first:pt-0"
+            >
               {/* Connecting line */}
               {index < educationData.length - 1 && (
-                <div className="absolute left-[20px] top-[44px] bottom-[-16px] w-px bg-muted-foreground/30" />
+                <div className="absolute left-[22px] top-[68px] bottom-[-8px] w-px bg-border" />
               )}
-              <div className="flex space-x-2">
-                <div className="aspect-square bg-muted h-10 flex items-center justify-center border rounded mt-1 relative z-10">
+              <div className="flex min-w-0 gap-3.5">
+                <div className="relative z-10 mt-0.5 flex aspect-square h-11 shrink-0 items-center justify-center rounded-lg border bg-muted">
                   {education.logo ? (
                     <Image
                       src={education.logo}
                       alt={`${education.institution} logo`}
-                      width={32}
-                      height={32}
-                      sizes="32px"
-                      className="h-8 w-8 rounded object-contain"
+                      width={36}
+                      height={36}
+                      sizes="36px"
+                      className="h-9 w-9 rounded object-contain"
                       title={education.institution}
                     />
                   ) : (
-                    <div className="flex size-8 items-center justify-center mt-1 rounded bg-muted/40">
-                      <GraduationCap className="size-5 text-muted-foreground" />
-                    </div>
+                    <GraduationCap className="size-5 text-muted-foreground" />
                   )}
                 </div>
-                <div className="space-y-1 pl-3">
-                  <h3 className="text-lg font-medium text-foreground md:text-xl">
-                    {education.institution}
-                  </h3>
+                <div className="min-w-0 flex-1 space-y-1">
+                  {/* Date pairs with the institution name only, so the lines under it
+                      keep the full column width. */}
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <h3 className="text-[15px] font-medium text-foreground">
+                      {education.institution}
+                    </h3>
+                    <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">
+                      {education.startDate} — {education.endDate}
+                    </span>
+                  </div>
                   <p className="text-sm text-muted-foreground">{education.degree}</p>
-                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <MapPin className="size-4" />
+                  <div className="flex items-start gap-1.5 text-sm text-muted-foreground">
+                    <MapPin className="mt-[3px] size-3.5 shrink-0" />
                     <span>{education.location}</span>
                   </div>
                 </div>
-              </div>
-              <div className="text-sm text-muted-foreground">
-                {education.startDate} - {education.endDate}
               </div>
             </div>
           ))}

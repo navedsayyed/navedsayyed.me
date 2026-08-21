@@ -6,65 +6,71 @@ import {
   ExpandableSection,
   ExpandableSectionDescription,
   ExpandableSectionHeader,
-  ExpandableSectionLabel,
   ExpandableSectionList,
   ExpandableSectionTitle,
 } from "@/components/ui/extended/expandable-section";
 import { ProjectsData } from "@/dev-constants/projects";
-
-function toSlug(title: string) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
-
-function getProjectSlug(project: { slug?: string; title: string }) {
-  return project.slug ?? toSlug(project.title);
-}
+import { getProjectSlug } from "@/lib/project-utils";
 
 const DeveloperProjects = () => {
   return (
-    <ShellWrapper>
-      <ExpandableSection>
-        <ExpandableSectionHeader>
-          <ExpandableSectionLabel>My Work</ExpandableSectionLabel>
-          <ExpandableSectionTitle>Projects I&apos;m proud of</ExpandableSectionTitle>
+    <ShellWrapper wide>
+      <ExpandableSection className="px-2 py-10">
+        <ExpandableSectionHeader className="mb-6 space-y-1">
+          <ExpandableSectionTitle>Work</ExpandableSectionTitle>
           <ExpandableSectionDescription>
-            A snapshot of product-focused experiments and client work where I handled everything
-            from UX flow to production deployment.
+            Things I designed, built and put in front of users.
           </ExpandableSectionDescription>
         </ExpandableSectionHeader>
 
-        <ExpandableSectionList>
+        <ExpandableSectionList className="space-y-0">
           {ProjectsData.map((project) => (
             <ProjectNavigationLink
               key={project.title}
               href={`/projects/${getProjectSlug(project)}`}
-              className="flex items-center justify-between rounded-md border p-3 hover:bg-muted/50 transition-colors group"
+              className="group flex items-start justify-between gap-4 border-t py-5 transition-colors first:border-t-0 first:pt-0 hover:bg-muted/30"
             >
-              <div className="flex space-x-3 items-center">
-                <div className="aspect-square bg-muted h-10 flex items-center justify-center border rounded shrink-0">
+              {/* flex-1 is load-bearing: without it this box shrink-to-fits its widest line
+                  (the tagline), so the year right-aligns to a different edge on every row. */}
+              <div className="flex min-w-0 flex-1 gap-3.5">
+                <div className="mt-0.5 flex aspect-square h-11 shrink-0 items-center justify-center rounded-lg border bg-muted">
                   <Image
                     src={project.icon}
                     alt={`${project.title} project icon`}
-                    width={32}
-                    height={32}
-                    sizes="32px"
-                    className="h-8 w-8 rounded object-cover"
+                    width={36}
+                    height={36}
+                    sizes="36px"
+                    className="h-9 w-9 rounded object-cover"
                     title={project.title}
                   />
                 </div>
-                <div className="space-y-0.5">
-                  <h3 className="text-base font-medium text-foreground group-hover:underline">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">{project.tagline}</p>
+                <div className="min-w-0 flex-1 space-y-1">
+                  {/* Year sits on the title row so the tagline and tags below get the
+                      full column width. */}
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <h3 className="text-[15px] font-medium text-foreground group-hover:underline">
+                      {project.title}
+                    </h3>
+                    {project.date && (
+                      <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">
+                        {new Date(project.date).getFullYear()}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{project.tagline}</p>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {project.techStack.slice(0, 4).map((tech) => (
+                      <span
+                        key={tech.name}
+                        className="rounded border px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
+                      >
+                        {tech.name}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <span className="text-muted-foreground shrink-0 pl-4 transition-colors group-hover:text-foreground">
-                <ArrowUpRight className="size-4" />
-              </span>
+              <ArrowUpRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
             </ProjectNavigationLink>
           ))}
         </ExpandableSectionList>
