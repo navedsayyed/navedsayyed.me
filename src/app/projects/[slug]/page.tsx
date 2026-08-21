@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { DotIcon, Download, ExternalLink, FileText, Github } from "lucide-react";
+import { Download, ExternalLink, FileText, Github } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
@@ -8,7 +8,7 @@ import PageShellWrapper from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
 import { Button } from "@/components/ui/button";
 import ScreenshotLightbox from "@/components/ui/extended/screenshot-lightbox";
-import StackBadge from "@/components/ui/extended/stack-badge";
+import ThemedIcon from "@/components/ui/extended/themed-icon";
 import { DeveloperDetails } from "@/dev-constants/details";
 import { ProjectsData } from "@/dev-constants/projects";
 import {
@@ -99,6 +99,13 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
   const siteUrl = DeveloperDetails.portfolio.replace(/\/$/, "");
   const projectUrl = `${siteUrl}/projects/${slug}`;
 
+  const currentIndex = ProjectsData.findIndex((p) => getProjectSlug(p) === slug);
+  const previousProject = currentIndex > 0 ? ProjectsData[currentIndex - 1] : null;
+  const nextProject =
+    currentIndex >= 0 && currentIndex < ProjectsData.length - 1
+      ? ProjectsData[currentIndex + 1]
+      : null;
+
   const softwareJsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
@@ -158,27 +165,50 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
                   className="h-10 w-10 rounded object-cover"
                 />
               </div>
-              <div className="min-w-0">
-                <h1 className="text-3xl font-medium tracking-tight text-foreground">
-                  {project.title}
-                </h1>
-                {project.date && (
-                  <span className="font-mono text-xs tabular-nums text-muted-foreground">
-                    {new Date(project.date).getFullYear()}
-                  </span>
-                )}
-              </div>
+              <h1 className="min-w-0 text-3xl font-medium tracking-tight text-foreground">
+                {project.title}
+              </h1>
             </div>
             <p className="max-w-[68ch] text-[15px] leading-relaxed text-muted-foreground">
               {project.tagline}
             </p>
           </div>
 
+          {/* Spec strip — the facts someone scans for before reading anything. */}
+          <dl className="flex flex-wrap gap-x-8 gap-y-3 border-y py-3">
+            {project.date && (
+              <div>
+                <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                  Year
+                </dt>
+                <dd className="mt-0.5 font-mono text-sm tabular-nums text-foreground">
+                  {new Date(project.date).getFullYear()}
+                </dd>
+              </div>
+            )}
+            <div>
+              <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                Stack
+              </dt>
+              <dd className="mt-0.5 text-sm text-foreground">
+                {project.techStack.length} technologies
+              </dd>
+            </div>
+            <div>
+              <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                Source
+              </dt>
+              <dd className="mt-0.5 text-sm text-foreground">
+                {project.repo ? "Public" : "Private"}
+              </dd>
+            </div>
+          </dl>
+
           <div className="flex min-h-9 flex-wrap items-center gap-2 pt-1">
             {hasActionLinks ? (
               <>
                 {project.repo && (
-                  <Button asChild variant="outline" size="sm" className="rounded-lg">
+                  <Button asChild variant="outline" size="sm" className="rounded-md">
                     <Link href={project.repo} target="_blank" rel="noreferrer noopener">
                       <Github className="h-4 w-4" />
                       <span>GitHub</span>
@@ -187,7 +217,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
                 )}
 
                 {project.liveLink && (
-                  <Button asChild variant="outline" size="sm" className="rounded-lg">
+                  <Button asChild variant="outline" size="sm" className="rounded-md">
                     <Link href={project.liveLink} target="_blank" rel="noreferrer noopener">
                       <ExternalLink className="h-4 w-4" />
                       <span>Live Demo</span>
@@ -196,7 +226,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
                 )}
 
                 {project.apkLink && (
-                  <Button asChild variant="outline" size="sm" className="rounded-lg">
+                  <Button asChild variant="outline" size="sm" className="rounded-md">
                     <Link href={project.apkLink} target="_blank" rel="noreferrer noopener">
                       <Download className="h-4 w-4" />
                       <span>Download APK</span>
@@ -205,7 +235,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
                 )}
 
                 {project.docsLink && (
-                  <Button asChild variant="outline" size="sm" className="rounded-lg">
+                  <Button asChild variant="outline" size="sm" className="rounded-md">
                     <Link href={project.docsLink} target="_blank" rel="noreferrer noopener">
                       <FileText className="h-4 w-4" />
                       <span>Docs</span>
@@ -222,60 +252,97 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
         </header>
       </ShellWrapper>
 
-      {/* Screenshots */}
-      {validScreenshots.length > 0 && (
-        <ShellWrapper wide>
-          <div className="space-y-3 px-2 pb-10">
-            <h2 className="text-2xl font-medium tracking-tight text-foreground">Screenshots</h2>
-            <ScreenshotLightbox screenshots={validScreenshots} projectTitle={project.title} />
-          </div>
-        </ShellWrapper>
-      )}
-
       <ShellWrapper wide>
-        <article className="space-y-8 px-2 pb-16">
-          {/* About */}
+        <article className="space-y-10 px-2 pb-12">
+          {/* Prose before pictures — the screenshots mean more once you know what it does. */}
           <section>
-            <h2 className="mb-3 text-2xl font-medium tracking-tight text-foreground">
+            <h2 className="mb-4 text-2xl font-medium tracking-tight text-foreground">
               About this project
             </h2>
-            <ul className="space-y-2 text-[15px] leading-relaxed text-muted-foreground">
+            <ul className="space-y-3">
               {project.description.map((line) => (
-                <li key={line} className="flex gap-1">
-                  <DotIcon className="mt-0.5 shrink-0" />
-                  <span>{line}</span>
+                <li
+                  key={line}
+                  className="relative pl-5 text-[15px] leading-[1.7] text-muted-foreground before:absolute before:left-0 before:top-[0.7em] before:h-1 before:w-1 before:rounded-full before:bg-muted-foreground/50"
+                >
+                  {line}
                 </li>
               ))}
             </ul>
           </section>
+
           {project.techStack && project.techStack.length > 0 && (
             <section>
-              <h2 className="mb-3 text-2xl font-medium tracking-tight text-foreground">
+              <h2 className="mb-4 text-2xl font-medium tracking-tight text-foreground">
                 Tech stack
               </h2>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {project.techStack.map((tech) => (
-                  <StackBadge
+                  <span
                     key={tech.name}
-                    name={tech.name}
-                    icon={tech.icon}
-                    hasDarkIcon={tech.hasDarkIcon}
-                  />
+                    className="inline-flex items-center gap-1.5 rounded-md border bg-muted/40 px-2 py-1 text-xs text-foreground/80"
+                  >
+                    <ThemedIcon
+                      src={tech.icon}
+                      alt=""
+                      size={16}
+                      hasDarkVariant={tech.hasDarkIcon}
+                      className="size-3.5 shrink-0 rounded-[3px]"
+                    />
+                    {tech.name}
+                  </span>
                 ))}
               </div>
             </section>
           )}
 
-          {/* Back links */}
-          <div className="flex flex-wrap gap-2 border-t pt-6">
+          {validScreenshots.length > 0 && (
+            <section>
+              <h2 className="mb-4 text-2xl font-medium tracking-tight text-foreground">
+                Screenshots
+              </h2>
+              <ScreenshotLightbox screenshots={validScreenshots} projectTitle={project.title} />
+            </section>
+          )}
+        </article>
+      </ShellWrapper>
+
+      {/* Adjacent projects — a dead end here sends people back to the tab bar. */}
+      <ShellWrapper wide>
+        <nav aria-label="More projects" className="px-2 pb-16">
+          <div className="grid gap-3 border-t pt-6 sm:grid-cols-2">
+            {[previousProject, nextProject].map((adjacent, index) =>
+              adjacent ? (
+                <Link
+                  key={adjacent.title}
+                  href={`/projects/${getProjectSlug(adjacent)}`}
+                  className={`group rounded-lg border p-4 transition-colors hover:bg-muted/40 ${
+                    index === 1 ? "sm:text-right" : ""
+                  }`}
+                >
+                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                    {index === 0 ? "← Previous" : "Next →"}
+                  </span>
+                  <p className="mt-1 text-[15px] font-medium text-foreground group-hover:underline">
+                    {adjacent.title}
+                  </p>
+                  <p className="mt-0.5 text-sm text-muted-foreground">{adjacent.tagline}</p>
+                </Link>
+              ) : (
+                <div key={`empty-${index === 0 ? "prev" : "next"}`} className="hidden sm:block" />
+              )
+            )}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2">
             <Button asChild variant="outline" size="sm" className="rounded-md">
-              <Link href="/projects">← All projects</Link>
+              <Link href="/projects">All projects</Link>
             </Button>
             <Button asChild variant="outline" size="sm" className="rounded-md">
               <Link href="/">Back to portfolio</Link>
             </Button>
           </div>
-        </article>
+        </nav>
       </ShellWrapper>
     </PageShellWrapper>
   );
