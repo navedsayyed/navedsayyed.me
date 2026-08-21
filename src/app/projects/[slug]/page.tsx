@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { DotIcon, Download, ExternalLink, FileText, Github } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import PageShellWrapper, { HatchDivider } from "@/components/layouts/page-shell";
 import ShellWrapper from "@/components/layouts/shell-wrapper";
 import { Button } from "@/components/ui/button";
@@ -11,20 +11,15 @@ import ScreenshotLightbox from "@/components/ui/extended/screenshot-lightbox";
 import StackBadge from "@/components/ui/extended/stack-badge";
 import { DeveloperDetails } from "@/dev-constants/details";
 import { ProjectsData } from "@/dev-constants/projects";
+import {
+  getCanonicalProjectSlug,
+  getProjectBySlug,
+  getProjectSlug,
+  PROJECT_LANGUAGES,
+} from "@/lib/project-utils";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
-}
-
-function toSlug(title: string) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
-
-function getProjectSlug(project: { slug?: string; title: string }) {
-  return project.slug ?? toSlug(project.title);
 }
 
 function filterExistingScreenshots(screenshots: string[] | undefined) {
@@ -42,35 +37,114 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const project = ProjectsData.find((p) => getProjectSlug(p) === slug);
+  const project = getProjectBySlug(slug);
   if (!project) return { title: "Project Not Found" };
 
   const siteUrl = DeveloperDetails.portfolio.replace(/\/$/, "");
+  const projectUrl = `${siteUrl}/projects/${slug}`;
+  // OG card filenames are always lowercase, independent of slug casing — Vercel's
+  // filesystem is case-sensitive, so `DotDays.png` would not resolve to `dotdays.png`.
+  const ogFile = `${slug.toLowerCase()}.png`;
+  const ogPath = join(process.cwd(), "public", "projects", "og", ogFile);
+  const ogImage = existsSync(ogPath)
+    ? `${siteUrl}/projects/og/${ogFile}`
+    : `${siteUrl}/og-image.png`;
+
+  const stack = project.techStack.map((tech) => tech.name);
+  const description = `${project.tagline}. Built by ${DeveloperDetails.name} with ${stack
+    .slice(0, 5)
+    .join(", ")}.`;
+
   return {
-    title: `${project.title} | ${DeveloperDetails.name}`,
-    description: project.tagline,
+    // Bare title — the root layout template appends "| Naved A. Sayyed"
+    title: project.title,
+    description,
+    keywords: [project.title, ...stack, "Naved A. Sayyed", "portfolio project"],
     openGraph: {
-      title: project.title,
-      description: project.tagline,
-      url: `${siteUrl}/projects/${slug}`,
+      title: `${project.title} — ${project.tagline}`,
+      description,
+      url: projectUrl,
       siteName: DeveloperDetails.name,
+      type: "article",
+      images: [
+        { url: ogImage, width: 1200, height: 630, alt: `${project.title} — ${project.tagline}` },
+      ],
     },
-    alternates: { canonical: `${siteUrl}/projects/${slug}` },
+    twitter: {
+      card: "summary_large_image" as const,
+      title: `${project.title} — ${project.tagline}`,
+      description,
+      images: [ogImage],
+    },
+    alternates: { canonical: projectUrl },
   };
 }
 
 const ProjectPage = async ({ params }: ProjectPageProps) => {
   const { slug } = await params;
-  const project = ProjectsData.find((p) => getProjectSlug(p) === slug);
-  const validScreenshots = filterExistingScreenshots(project?.screenshots);
+  const project = getProjectBySlug(slug);
+
+  if (!project) {
+    // Wrong-cased URL (e.g. /projects/dotdays) → the project's canonical slug.
+    const canonicalSlug = getCanonicalProjectSlug(slug);
+    if (canonicalSlug) permanentRedirect(`/projects/${canonicalSlug}`);
+    notFound();
+  }
+
+  const validScreenshots = filterExistingScreenshots(project.screenshots);
   const hasActionLinks = Boolean(
-    project?.repo || project?.liveLink || project?.apkLink || project?.docsLink
+    project.repo || project.liveLink || project.apkLink || project.docsLink
   );
 
-  if (!project) notFound();
+  const siteUrl = DeveloperDetails.portfolio.replace(/\/$/, "");
+  const projectUrl = `${siteUrl}/projects/${slug}`;
+
+  const softwareJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    name: project.title,
+    headline: `${project.title} — ${project.tagline}`,
+    description: project.description.join(" "),
+    abstract: project.tagline,
+    url: projectUrl,
+    image: `${siteUrl}${project.icon}`,
+    inLanguage: "en",
+    ...(project.date ? { dateCreated: project.date } : {}),
+    ...(project.repo ? { codeRepository: project.repo } : {}),
+    ...(project.liveLink ? { targetProduct: { "@type": "WebSite", url: project.liveLink } } : {}),
+    programmingLanguage: project.techStack
+      .map((tech) => tech.name)
+      .filter((name) => PROJECT_LANGUAGES.has(name)),
+    runtimePlatform: project.techStack
+      .map((tech) => tech.name)
+      .filter((name) => !PROJECT_LANGUAGES.has(name)),
+    author: {
+      "@type": "Person",
+      name: DeveloperDetails.name,
+      url: siteUrl,
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Projects", item: `${siteUrl}/projects` },
+      { "@type": "ListItem", position: 3, name: project.title, item: projectUrl },
+    ],
+  };
 
   return (
     <PageShellWrapper contentClassName="flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Header — same hatched-bg pattern as BlogHeader */}
       <ShellWrapper>
         <header className="space-y-4 p-4">
@@ -205,10 +279,13 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
             </section>
           )}
 
-          {/* Back link */}
-          <div>
+          {/* Back links */}
+          <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline" size="sm" className="rounded-full">
-              <Link href="/">← Back to Portfolio</Link>
+              <Link href="/projects">← All projects</Link>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="rounded-full">
+              <Link href="/">Back to portfolio</Link>
             </Button>
           </div>
         </article>

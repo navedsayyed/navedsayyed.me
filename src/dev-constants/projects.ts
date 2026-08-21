@@ -134,6 +134,7 @@ export const ProjectsData: Projects[] = [
   {
     icon: "/projects/DotDays.png",
     title: "DotDays",
+    // Canonical casing is intentional — this exact URL is printed on the resume.
     slug: "DotDays",
     tagline: "Time-Visualization Wallpaper App",
     date: "2025-06-10",

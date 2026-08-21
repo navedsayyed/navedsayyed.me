@@ -19,6 +19,9 @@ const nextConfig: NextConfig = {
         destination: "/:path*",
         permanent: true,
       },
+      // NOTE: project slug casing is normalised inside src/app/projects/[slug]/page.tsx,
+      // not here — `source` matching is case-insensitive, so a rule here would also match
+      // its own destination and redirect to itself in a loop.
       // Old Blogger date-based post URLs (e.g., /2023/01/some-post.html)
       {
         source: "/:year(\\d{4})/:month(\\d{2})/:slug.html",
