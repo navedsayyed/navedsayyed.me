@@ -48,7 +48,7 @@ export const DeveloperDetails: DeveloperConfig = {
     // or it gets truncated mid-sentence, and lead with the name so it bolds on name searches.
     title: "Naved A. Sayyed | Full Stack & Mobile Developer from India",
     description:
-      "Naved A. Sayyed is a full-stack and mobile developer from Nashik, India, building production apps with React Native, Next.js, TypeScript and Supabase.",
+      "Naved A. Sayyed is a full-stack and mobile developer from Nashik, India, building production apps with React Native, Next.js and TypeScript.",
     keywords: [
       "Naved A. Sayyed",
       "navedsayyed",
