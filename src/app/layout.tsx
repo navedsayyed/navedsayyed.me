@@ -68,11 +68,20 @@ const personJsonLd = {
     addressCountry: DeveloperDetails.location.country,
   },
   sameAs: DeveloperDetails.socialLinks.map((link) => link.url),
+  // What Google uses to understand what this person actually does. Kept in step with the
+  // stack section — every entry here ships in a real project.
   knowsAbout: [
+    "React Native",
+    "Expo",
     "React",
     "Next.js",
     "TypeScript",
+    "Supabase",
+    "PostgreSQL",
     "Node.js",
+    "Python",
+    "FastAPI",
+    "Mobile App Development",
     "Full Stack Development",
     "Web Development",
   ],
