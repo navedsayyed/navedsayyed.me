@@ -98,7 +98,7 @@ export const ProjectsData: Projects[] = [
     tagline: "AI-Powered Citizen Complaint System",
     date: "2026-03-17",
     repo: "https://github.com/Hamizkhan08/Grievance-Resolver",
-    liveLink: "https://grievanceresolver.vercel.app/",
+    liveLink: "https://grievance-resolver.vercel.app",
     description: [
       "Built a multi-agent AI system that automates end-to-end citizen complaint resolution for civic issues — not a simple form-and-database app, but a workflow orchestration system where 9 specialized AI agents handle classification, monitoring, and follow-up with minimal human intervention.",
       "Orchestrated the agents using LangGraph's StateGraph, where a complaint flows through a Classification agent (determines category and urgency), a Sentiment agent (detects emotional tone to boost urgency for distressed citizens), and an SLA Assignment agent (sets realistic deadlines — 15 minutes for fire emergencies, up to several days for routine maintenance issues).",
