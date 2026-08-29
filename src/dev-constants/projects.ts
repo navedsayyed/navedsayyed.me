@@ -6,10 +6,9 @@ export const ProjectsData: Projects[] = [
     title: "Snap2Fix",
     tagline: "Smart Complaint Management System",
     date: "2025-01-15",
-    // repo: "https://github.com/navedsayyed/Snap2Fix",
+    repo: "https://github.com/navedsayyed/Snap2Fix",
     liveLink: "https://snap2fix.vercel.app/",
-    apkLink:
-      "https://github.com/navedsayyed/Snap2Fix-Releases/releases/latest/download/Snap2Fix.apk",
+    apkLink: "https://github.com/navedsayyed/Snap2Fix/releases/latest/download/Snap2Fix.apk",
     description: [
       "Built a full-stack complaint resolution platform with two connected apps — a public Next.js web portal where users submit and track complaints, and a React Native app for Technicians, Admins, and Super Admins to manage and resolve them — both sharing one real-time Supabase (PostgreSQL) backend.",
       "Implemented AI-powered complaint routing using Google Gemini: when a user isn't sure which department their issue belongs to, Gemini reads the complaint description and automatically classifies it into the right category with a confidence score, backed by a rule-based floor-and-type matching engine as a fallback for accuracy.",
@@ -53,8 +52,7 @@ export const ProjectsData: Projects[] = [
     date: "2024-11-10",
     repo: "https://github.com/navedsayyed/LokalMusic",
     // liveLink: "https://snap2fix.vercel.app/",
-    apkLink:
-      "https://github.com/navedsayyed/LokalMusic-Releases/releases/latest/download/LokalMusic.apk",
+    apkLink: "https://github.com/navedsayyed/LokalMusic/releases/latest/download/LokalMusic.apk",
     description: [
       "Built a full-featured, Spotify-style music streaming app in React Native — search for songs, stream them instantly, download for offline listening, build playlists, view synced lyrics, and manage a proper queue system, entirely client-side with no backend, server, or login required.",
       "Engineered a custom dual-queue playback engine to replicate how Spotify actually handles queueing: a context queue (your current playlist or search results) runs alongside a user queue (songs you manually queue up next), with priority logic that correctly plays your manually queued songs first before falling back to the context queue.",
@@ -172,8 +170,9 @@ export const ProjectsData: Projects[] = [
     date: "2024-09-20",
     // repo: "https://github.com/navedsayyed/MenuForge",
     // liveLink: "https://menuforge.vercel.app/",
-    apkLink:
-      "https://github.com/navedsayyed/MenuForge-Releases/releases/latest/download/MenuForge.apk",
+    // No published release yet, so the download button would 404. Restore this once a release
+    // is cut: https://github.com/navedsayyed/MenuForge/releases/latest/download/MenuForge.apk
+    // apkLink: "https://github.com/navedsayyed/MenuForge/releases/latest/download/MenuForge.apk",
     description: [
       "Built a cross-platform mobile app in React Native that lets restaurant owners manage their entire menu — create, edit, and organize dishes with images, generate QR codes, and share digital menus with customers instantly, no printing required.",
       "Solved a real platform-level compatibility issue: React Native's file handling wasn't compatible with the Appwrite SDK's standard file upload method, causing uploads to fail silently. Engineered a fallback upload path using base64 encoding combined with multipart form data and JWT authentication, tracing the actual data flow rather than trusting the surface-level error to find the real mismatch.",
