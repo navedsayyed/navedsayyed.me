@@ -168,11 +168,9 @@ export const ProjectsData: Projects[] = [
     title: "MenuForge",
     tagline: "Digital Menu Management System for Restaurants",
     date: "2024-09-20",
-    // repo: "https://github.com/navedsayyed/MenuForge",
+    repo: "https://github.com/navedsayyed/MenuForge",
     // liveLink: "https://menuforge.vercel.app/",
-    // No published release yet, so the download button would 404. Restore this once a release
-    // is cut: https://github.com/navedsayyed/MenuForge/releases/latest/download/MenuForge.apk
-    // apkLink: "https://github.com/navedsayyed/MenuForge/releases/latest/download/MenuForge.apk",
+    apkLink: "https://github.com/navedsayyed/MenuForge/releases/latest/download/MenuForge.apk",
     description: [
       "Built a cross-platform mobile app in React Native that lets restaurant owners manage their entire menu — create, edit, and organize dishes with images, generate QR codes, and share digital menus with customers instantly, no printing required.",
       "Solved a real platform-level compatibility issue: React Native's file handling wasn't compatible with the Appwrite SDK's standard file upload method, causing uploads to fail silently. Engineered a fallback upload path using base64 encoding combined with multipart form data and JWT authentication, tracing the actual data flow rather than trusting the surface-level error to find the real mismatch.",
